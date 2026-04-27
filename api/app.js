@@ -42,7 +42,7 @@ const swaggerOptions = {
     },
 };
 
-app.use("/api/doc",swaggerUi.serve,swaggerUi.setup(swaggerSpec, swaggerOptions));
+app.use("/api/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerOptions));
 
 app.use("/api", authRoutes);
 app.use("/api/recipes", recipeRoutes);
