@@ -5,8 +5,9 @@ const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
 
-const fs = require("fs");
-const path = require("path");
+const authRoutes = require("./src/routes/authRoutes");
+const recipeRoutes = require("./src/routes/recipeRoutes");
+const shoppingListRoutes = require("./src/routes/shoppingListRoutes");
 
 const app = express();
 app.use(cors());
@@ -43,12 +44,8 @@ const swaggerOptions = {
 
 app.use("/api/doc",swaggerUi.serve,swaggerUi.setup(swaggerSpec, swaggerOptions));
 
-const routesPath = path.join(__dirname, "src/routes");
-
-fs.readdirSync(routesPath).forEach((file) => {
-    if (file.endsWith(".js")) {
-        app.use("/api", require(path.join(routesPath, file)));
-    }
-});
+app.use("/api/auth", authRoutes);
+app.use("/api/recipes", recipeRoutes);
+app.use("/api/lists", shoppingListRoutes);
 
 module.exports = app;
