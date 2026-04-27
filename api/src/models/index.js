@@ -1,45 +1,33 @@
-const sequelize = require("../config/database");
-const User = require("./User");
-const Product = require("./Product");
-const Recipe = require("./Recipe");
-const RecipeProduct = require("./RecipeProduct");
-const ShoppingList = require("./ShoppingList");
-const ListItem = require("./ListItem");
+const fs = require("fs");
+const path = require("path");
+const Sequelize = require("sequelize");
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || "development";
+const config = require("../config/config.js")[env];
+const db = {};
 
-// Un user possède des produits, recettes et listes
-User.hasMany(Product, { foreignKey: "userId", onDelete: "CASCADE" });
-User.hasMany(Recipe, { foreignKey: "userId", onDelete: "CASCADE" });
-User.hasMany(ShoppingList, { foreignKey: "userId", onDelete: "CASCADE" });
-Product.belongsTo(User, { foreignKey: "userId" });
-Recipe.belongsTo(User, { foreignKey: "userId" });
-ShoppingList.belongsTo(User, { foreignKey: "userId" });
+const sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config,
+);
 
-// Recette <-> Produit (many-to-many via RecipeProduct)
-Recipe.belongsToMany(Product, {
-    through: RecipeProduct,
-    foreignKey: "recipeId",
-});
-Product.belongsToMany(Recipe, {
-    through: RecipeProduct,
-    foreignKey: "productId",
-});
+fs.readdirSync(__dirname)
+    .filter((file) => file !== basename && file.slice(-3) === ".js")
+    .forEach((file) => {
+        const model = require(path.join(__dirname, file))(
+            sequelize,
+            Sequelize.DataTypes,
+        );
+        db[model.name] = model;
+    });
 
-// Liste <-> Produit (many-to-many via ListItem)
-ShoppingList.belongsToMany(Product, {
-    through: ListItem,
-    foreignKey: "listId",
-});
-Product.belongsToMany(ShoppingList, {
-    through: ListItem,
-    foreignKey: "productId",
+Object.keys(db).forEach((modelName) => {
+    if (db[modelName].associate) db[modelName].associate(db);
 });
 
-module.exports = {
-    sequelize,
-    User,
-    Product,
-    Recipe,
-    RecipeProduct,
-    ShoppingList,
-    ListItem,
-};
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;

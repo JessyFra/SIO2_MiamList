@@ -1,9 +1,26 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
 
-const ShoppingList = sequelize.define("ShoppingList", {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: DataTypes.STRING, allowNull: false },
-});
+module.exports = (sequelize) => {
+    const ShoppingList = sequelize.define(
+        "ShoppingList",
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+            },
+            name: { type: DataTypes.STRING(191), allowNull: false },
+        },
+        { tableName: "shopping_list" },
+    );
 
-module.exports = ShoppingList;
+    ShoppingList.associate = (db) => {
+        ShoppingList.belongsTo(db.User, { foreignKey: "userId" });
+        ShoppingList.belongsToMany(db.Product, {
+            through: "ListItem",
+            foreignKey: "listId",
+        });
+    };
+
+    return ShoppingList;
+};
