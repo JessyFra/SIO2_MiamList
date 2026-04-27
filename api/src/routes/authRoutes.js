@@ -130,6 +130,4 @@ router.post("/login", authController.login);
  */
 router.get('/me', authMiddleware, authController.myself);
 
-router.use("/lists", shoppingListRoutes);
-
 module.exports = router;
