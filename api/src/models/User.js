@@ -1,5 +1,4 @@
 const { DataTypes } = require("sequelize");
-
 module.exports = (sequelize) => {
     const User = sequelize.define(
         "User",
@@ -9,7 +8,6 @@ module.exports = (sequelize) => {
                 primaryKey: true,
                 autoIncrement: true,
             },
-            username: { type: DataTypes.STRING(191), allowNull: false },
             email: {
                 type: DataTypes.STRING(191),
                 allowNull: false,
@@ -31,3 +29,27 @@ module.exports = (sequelize) => {
 
     return User;
 };
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     UserMinimal:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         quizId:
+ *           type: integer
+ *           example: 1
+ *         title:
+ *           type: string
+ *           example: Le pensionnat de Godefroy a servi d'hôpital de guerre.
+ *         isCorrect:
+ *           type: boolean
+ *           example: true
+ *         answer:
+ *           type: string
+ *           example: Entre 1914 et 1919, il a accueilli environ 190 lits pour les blessés.
+ */
