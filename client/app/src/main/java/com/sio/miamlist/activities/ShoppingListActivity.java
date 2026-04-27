@@ -2,14 +2,17 @@ package com.sio.miamlist.activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.sio.miamlist.R;
 import com.sio.miamlist.adapters.ShoppingListAdapter;
 import com.sio.miamlist.services.ApiLinker;
@@ -27,6 +30,8 @@ public class ShoppingListActivity extends AppCompatActivity {
     private ShoppingListAdapter adapter;
     private final List<ShoppingListAdapter.ListItem> items = new ArrayList<>();
     private String token;
+    private TextView tvListCount;
+    private View layoutEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,9 @@ public class ShoppingListActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("miamlist", MODE_PRIVATE);
         token = prefs.getString("token", null);
 
+        tvListCount = findViewById(R.id.tvListCount);
+        layoutEmpty = findViewById(R.id.layoutEmpty);
+
         RecyclerView recycler = findViewById(R.id.recyclerShoppingLists);
         recycler.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ShoppingListAdapter(items, new ShoppingListAdapter.OnListActionListener() {
@@ -43,6 +51,7 @@ public class ShoppingListActivity extends AppCompatActivity {
             public void onListClick(int id, String name) {
                 // TODO : ouvrir le détail de la liste (issue #22)
             }
+
             @Override
             public void onListDelete(int id) {
                 deleteList(id);
@@ -50,7 +59,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         });
         recycler.setAdapter(adapter);
 
-        FloatingActionButton fab = findViewById(R.id.fabAddList);
+        ExtendedFloatingActionButton fab = findViewById(R.id.fabAddList);
         fab.setOnClickListener(v -> showCreateListDialog());
 
         loadLists();
@@ -73,6 +82,7 @@ public class ShoppingListActivity extends AppCompatActivity {
                             ));
                         }
                         adapter.notifyDataSetChanged();
+                        updateEmptyState();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -83,19 +93,46 @@ public class ShoppingListActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void showCreateListDialog() {
-        EditText input = new EditText(this);
-        input.setHint("Nom de la liste");
+    private void updateEmptyState() {
+        int count = items.size();
+        tvListCount.setText(String.valueOf(count));
+        layoutEmpty.setVisibility(count == 0 ? View.VISIBLE : View.GONE);
+    }
 
-        new AlertDialog.Builder(this)
-                .setTitle("Nouvelle liste")
-                .setView(input)
-                .setPositiveButton("Créer", (dialog, which) -> {
-                    String name = input.getText().toString().trim();
-                    if (!name.isEmpty()) createList(name);
-                })
-                .setNegativeButton("Annuler", null)
-                .show();
+    private void showCreateListDialog() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.Theme_MiamList_BottomSheet);
+        View view = getLayoutInflater().inflate(R.layout.dialog_create_list, null);
+        dialog.setContentView(view);
+
+        // Fond transparent pour que bg_bottom_sheet s'applique correctement
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextInputEditText editName = view.findViewById(R.id.editListName);
+        MaterialButton btnCreate  = view.findViewById(R.id.btnCreate);
+        MaterialButton btnCancel  = view.findViewById(R.id.btnCancel);
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        btnCreate.setOnClickListener(v -> {
+            String name = editName.getText() != null
+                    ? editName.getText().toString().trim() : "";
+            if (!name.isEmpty()) {
+                createList(name);
+                dialog.dismiss();
+            } else {
+                editName.setError("Veuillez saisir un nom");
+            }
+        });
+
+        // Valider avec la touche "Entrée" du clavier
+        editName.setOnEditorActionListener((tv, actionId, event) -> {
+            btnCreate.performClick();
+            return true;
+        });
+
+        dialog.show();
     }
 
     private void createList(String name) {
