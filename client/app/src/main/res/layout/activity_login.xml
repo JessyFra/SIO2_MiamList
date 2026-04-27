@@ -1,61 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="32dp">
+    android:background="@drawable/bg_login_header">
 
-    <TextView
+    <!-- Cercle décoratif haut-droite -->
+    <View
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="-80dp"
+        android:layout_marginEnd="-80dp"
+        android:background="#1AFFFFFF" />
+
+    <!-- Petit cercle bas-gauche -->
+    <View
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="-30dp"
+        android:layout_marginTop="-160dp"
+        android:background="#0DFFFFFF" />
+
+    <!-- Bloc logo centré dans le header -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MiamList"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="40dp" />
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="96dp"
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <com.google.android.material.textfield.TextInputLayout
+        <!-- Monogramme -->
+        <TextView
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:text="M"
+            android:textSize="36sp"
+            android:fontFamily="sans-serif-thin"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:background="#2AFFFFFF"
+            android:layout_marginBottom="18dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MiamList"
+            android:textSize="36sp"
+            android:fontFamily="sans-serif-thin"
+            android:textColor="#FFFFFF"
+            android:letterSpacing="0.08" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="vos courses, simplement"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="#BFFFFFFF"
+            android:letterSpacing="0.12"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+    <!-- ══ Feuille blanche avec coins supérieurs arrondis ══ -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_marginBottom="16dp">
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:background="@drawable/bg_login_sheet"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:paddingTop="40dp"
+        android:paddingBottom="56dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editEmail"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Connexion"
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="#1A1A1A"
+            android:letterSpacing="0.02"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ravi de vous revoir"
+            android:textSize="13sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="#AAAAAA"
+            android:layout_marginBottom="32dp" />
+
+        <!-- Champ Email -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="Adresse e-mail"
+            style="@style/Widget.MiamList.TextInputLayout"
+            android:layout_marginBottom="16dp"
+            app:hintTextColor="@color/on_surface_secondary"
+            app:boxStrokeColor="@color/outline">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Mot de passe"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:passwordToggleEnabled="true"
-        android:layout_marginBottom="24dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/on_surface"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-light" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editPassword"
+        <!-- Champ Mot de passe -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="Mot de passe"
+            style="@style/Widget.MiamList.TextInputLayout"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/on_surface_secondary"
+            android:layout_marginBottom="32dp"
+            app:hintTextColor="@color/on_surface_secondary"
+            app:boxStrokeColor="@color/outline">
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Se connecter" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="@color/on_surface"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-light" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tvError"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#D32F2F"
-        android:layout_marginTop="12dp"
-        android:visibility="gone" />
+        <!-- Bouton connexion -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Se connecter"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif"
+            android:letterSpacing="0.06"
+            android:textAllCaps="false"
+            app:backgroundTint="@color/accent"
+            app:cornerRadius="12dp"
+            app:elevation="0dp"
+            app:rippleColor="#33FFFFFF" />
 
-</LinearLayout>
+        <!-- Erreur -->
+        <TextView
+            android:id="@+id/tvError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/error"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</FrameLayout>
