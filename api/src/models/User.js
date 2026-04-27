@@ -1,5 +1,4 @@
 const { DataTypes } = require("sequelize");
-
 module.exports = (sequelize) => {
     const User = sequelize.define(
         "User",
@@ -9,7 +8,6 @@ module.exports = (sequelize) => {
                 primaryKey: true,
                 autoIncrement: true,
             },
-            username: { type: DataTypes.STRING(191), allowNull: false },
             email: {
                 type: DataTypes.STRING(191),
                 allowNull: false,

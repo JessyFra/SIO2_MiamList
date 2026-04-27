@@ -13,6 +13,12 @@ const swaggerSpec = swaggerJsdoc({
     definition: {
         openapi: "3.0.0",
         info: { title: "MiamList API", version: "1.0.0" },
+        servers: [
+            {
+                url: "/api",
+                description: "API base path",
+            },
+        ],
         components: {
             securitySchemes: {
                 bearerAuth: {
@@ -26,8 +32,13 @@ const swaggerSpec = swaggerJsdoc({
     apis: ["./src/routes/*.js", "./src/models/*.js"],
 });
 
-app.use("/api/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+const swaggerOptions = {
+    swaggerOptions: {
+        persistAuthorization: true,
+    },
+};
 
+app.use("/api/doc",swaggerUi.serve,swaggerUi.setup(swaggerSpec, swaggerOptions));
 app.use("/api", routes);
 
 module.exports = app;
