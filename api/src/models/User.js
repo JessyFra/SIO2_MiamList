@@ -39,9 +39,6 @@ module.exports = (sequelize) => {
  *         id:
  *           type: integer
  *           example: 1
- *         username:
- *           type: string
- *           example: "user"
  *         email:
  *           type: string
  *           example: "user@example.com"
