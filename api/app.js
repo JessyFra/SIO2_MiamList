@@ -32,6 +32,7 @@ const swaggerSpec = swaggerJsdoc({
     },
     apis: ["./src/routes/*.js", "./src/models/*.js"],
 });
+app.use("/api/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const swaggerOptions = {
     swaggerOptions: {
