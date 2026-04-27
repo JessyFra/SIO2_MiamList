@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { User } = require("../models");
+const { User, Product, Recipe, ShoppingList, ListItem } = require("../models");
 
 exports.register = async (email, password) => {
     const existing = await User.findOne({
@@ -55,4 +55,35 @@ exports.login = async (email, password) => {
         token_type: "Bearer",
         expires_in: process.env.JWT_EXPIRES_IN,
     };
+};
+
+exports.myself = async (email) => {
+    const user = await User.findOne({
+        where: { email },
+        include: [
+            {
+                model: Product
+            },
+            {
+                model: Recipe, as: "Recipes",
+                include: [
+                    {
+                        model: Product
+                    }
+                ]
+            },
+            {
+                model: ShoppingList
+            }
+        ]
+    });
+
+    if (!user) {
+        const error = new Error("Identifiants invalides");
+        error.code = "INVALID_CREDENTIALS";
+
+        throw error;
+    }
+
+    return user;
 };
