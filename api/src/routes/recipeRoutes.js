@@ -108,6 +108,6 @@ router.put("/:id", auth, recipeController.update);
  *       204:
  *         description: Supprimé
  */
-router.delete("/:id", auth, recipeController.remove);
+router.delete("recipe/:id", auth, recipeController.remove);
 
 module.exports = router;
