@@ -27,7 +27,7 @@ const authController = require("../controllers/authController");
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UserMinimal'
+ *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Mauvaise requête
  *         content:
