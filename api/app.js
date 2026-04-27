@@ -9,7 +9,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Swagger
 const swaggerSpec = swaggerJsdoc({
     definition: {
         openapi: "3.0.0",
@@ -32,7 +31,6 @@ const swaggerSpec = swaggerJsdoc({
     },
     apis: ["./src/routes/*.js", "./src/models/*.js"],
 });
-app.use("/api/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const swaggerOptions = {
     swaggerOptions: {
@@ -40,12 +38,7 @@ const swaggerOptions = {
     },
 };
 
-app.use(
-    "/api/doc",
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerSpec, swaggerOptions),
-);
-// Routes
+app.use("/api/doc",swaggerUi.serve,swaggerUi.setup(swaggerSpec, swaggerOptions));
 app.use("/api", routes);
 
 module.exports = app;

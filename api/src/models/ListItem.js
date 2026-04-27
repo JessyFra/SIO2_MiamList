@@ -12,3 +12,17 @@ module.exports = (sequelize) => {
 
     return ListItem;
 };
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     ListItem:
+ *       properties:
+ *         quantity:
+ *           type: number
+ *           example: 1.5
+ *         checked:
+ *           type: boolean
+ *           example: false
+ */

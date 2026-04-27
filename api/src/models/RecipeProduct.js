@@ -11,3 +11,14 @@ module.exports = (sequelize) => {
 
     return RecipeProduct;
 };
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     RecipeProduct:
+ *       properties:
+ *         quantity:
+ *           type: number
+ *           example: 2.5
+ */
