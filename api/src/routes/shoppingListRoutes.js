@@ -30,7 +30,7 @@ const shoppingListController = require("../controllers/shoppingListController");
  *       401:
  *         description: Non authentifié
  */
-router.get("/", auth, shoppingListController.getAll);
+router.get("/lists", auth, shoppingListController.getAll);
 
 /**
  * @swagger
@@ -56,7 +56,7 @@ router.get("/", auth, shoppingListController.getAll);
  *       404:
  *         description: Liste introuvable
  */
-router.get("/:id", auth, shoppingListController.getOne);
+router.get("/lists/:id", auth, shoppingListController.getOne);
 
 /**
  * @swagger
@@ -86,7 +86,7 @@ router.get("/:id", auth, shoppingListController.getOne);
  *       400:
  *         description: Paramètre manquant
  */
-router.post("/", auth, shoppingListController.create);
+router.post("/lists", auth, shoppingListController.create);
 
 /**
  * @swagger
@@ -122,7 +122,7 @@ router.post("/", auth, shoppingListController.create);
  *       404:
  *         description: Liste introuvable
  */
-router.put("/:id", auth, shoppingListController.update);
+router.put("/lists/:id", auth, shoppingListController.update);
 
 /**
  * @swagger
@@ -144,6 +144,6 @@ router.put("/:id", auth, shoppingListController.update);
  *       404:
  *         description: Liste introuvable
  */
-router.delete("/:id", auth, shoppingListController.remove);
+router.delete("/lists/:id", auth, shoppingListController.remove);
 
 module.exports = router;
