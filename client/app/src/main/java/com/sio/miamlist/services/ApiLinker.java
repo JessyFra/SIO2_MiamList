@@ -11,7 +11,7 @@ import okhttp3.Response;
 
 public class ApiLinker {
 
-    private final String BASE_URL = "";
+    private final String BASE_URL = "localhost:3000/api/";
     private static ApiLinker instance = null;
 
     public static ApiLinker getInstance() {
