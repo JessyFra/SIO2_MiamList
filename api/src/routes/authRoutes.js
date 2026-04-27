@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
+
 const authController = require("../controllers/authController");
+const authMiddleware = require('../middlewares/authMiddleware');
 
 /**
  * @swagger
@@ -109,5 +111,23 @@ router.post("/register", authController.register);
  *                   example: Invalid credentials
  */
 router.post("/login", authController.login);
+
+/**
+ * @swagger
+ * /me:
+ *   get:
+ *     summary: Récupération de son utilisateur
+ *     tags: [Authentification]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Utilisateur récupéré avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+router.get('/me', authMiddleware, authController.myself);
 
 module.exports = router;
