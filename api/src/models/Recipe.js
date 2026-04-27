@@ -1,10 +1,27 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
 
-const Recipe = sequelize.define("Recipe", {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: DataTypes.STRING, allowNull: false },
-    description: { type: DataTypes.TEXT, defaultValue: "" },
-});
+module.exports = (sequelize) => {
+    const Recipe = sequelize.define(
+        "Recipe",
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+            },
+            name: { type: DataTypes.STRING(191), allowNull: false },
+            description: { type: DataTypes.TEXT, defaultValue: "" },
+        },
+        { tableName: "recipe" },
+    );
 
-module.exports = Recipe;
+    Recipe.associate = (db) => {
+        Recipe.belongsTo(db.User, { foreignKey: "userId" });
+        Recipe.belongsToMany(db.Product, {
+            through: "RecipeProduct",
+            foreignKey: "recipeId",
+        });
+    };
+
+    return Recipe;
+};

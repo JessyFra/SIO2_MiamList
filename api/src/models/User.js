@@ -1,11 +1,33 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
 
-const User = sequelize.define("User", {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    username: { type: DataTypes.STRING, allowNull: false },
-    email: { type: DataTypes.STRING, allowNull: false, unique: true },
-    password: { type: DataTypes.STRING, allowNull: false },
-});
+module.exports = (sequelize) => {
+    const User = sequelize.define(
+        "User",
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+            },
+            username: { type: DataTypes.STRING(191), allowNull: false },
+            email: {
+                type: DataTypes.STRING(191),
+                allowNull: false,
+                unique: true,
+            },
+            password: { type: DataTypes.STRING(191), allowNull: false },
+        },
+        { tableName: "user" },
+    );
 
-module.exports = User;
+    User.associate = (db) => {
+        User.hasMany(db.Product, { foreignKey: "userId", onDelete: "CASCADE" });
+        User.hasMany(db.Recipe, { foreignKey: "userId", onDelete: "CASCADE" });
+        User.hasMany(db.ShoppingList, {
+            foreignKey: "userId",
+            onDelete: "CASCADE",
+        });
+    };
+
+    return User;
+};
