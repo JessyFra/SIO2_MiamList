@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/authController");
+const shoppingListRoutes = require("./shoppingListRoutes");
 
 /**
  * @swagger
@@ -109,5 +110,7 @@ router.post("/register", authController.register);
  *                   example: Invalid credentials
  */
 router.post("/login", authController.login);
+
+router.use("/lists", shoppingListRoutes);
 
 module.exports = router;
