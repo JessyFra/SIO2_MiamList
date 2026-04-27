@@ -36,9 +36,6 @@ exports.login = async (req, res) => {
         return res.json(tokenData);
     } catch (error) {
         if (error.code === "INVALID_CREDENTIALS") {
-            if (email) {
-                logService.create(email);
-            }
             return res.status(401).json({ error: error.message });
         } else {
             return res.status(500).json({ error: error.message });

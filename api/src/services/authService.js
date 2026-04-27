@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models");
 
-exports.register = async (email, password, role = "USER") => {
+exports.register = async (email, password) => {
     const existing = await User.findOne({
         where: { email },
     });
@@ -15,9 +15,9 @@ exports.register = async (email, password, role = "USER") => {
     }
 
     const hashed = await bcrypt.hash(password, 10);
-    const user = await User.create({ email, password: hashed, role });
+    const user = await User.create({ email, password: hashed});
 
-    return { id: user.id, email: user.email, role: user.role };
+    return { id: user.id, email: user.email};
 };
 
 exports.login = async (email, password) => {
@@ -45,7 +45,6 @@ exports.login = async (email, password) => {
         {
             id: user.id,
             email: user.email,
-            role: user.role,
         },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN },
