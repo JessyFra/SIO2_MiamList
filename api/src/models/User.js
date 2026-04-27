@@ -31,3 +31,23 @@ module.exports = (sequelize) => {
 
     return User;
 };
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         username:
+ *           type: string
+ *           example: "user"
+ *         email:
+ *           type: string
+ *           example: "user@example.com"
+ *         password:
+ *           type: string
+ *           example: "user"
+ */

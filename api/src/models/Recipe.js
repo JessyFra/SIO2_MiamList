@@ -25,3 +25,20 @@ module.exports = (sequelize) => {
 
     return Recipe;
 };
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Recipe:
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         name:
+ *           type: string
+ *           example: "Gâteau à la fraise"
+ *         description:
+ *           type: string
+ *           example: "Gâteau d'anniversaire"
+ */
