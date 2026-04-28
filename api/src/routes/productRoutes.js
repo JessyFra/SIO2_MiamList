@@ -18,7 +18,7 @@ const productController = require("../controllers/productController");
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/Product'
  */
 router.get("/product", authMiddleware, productController.getAll);
 
@@ -43,7 +43,7 @@ router.get("/product", authMiddleware, productController.getAll);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/Product'
  *       403:
  *         description: Erreur d'appartenance
  *         content:
@@ -99,7 +99,7 @@ router.get("/product/:id", authMiddleware, productController.get);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UserMinimal'
+ *               $ref: '#/components/schemas/Product'
  *       400:
  *         description: Mauvaise requête
  *         content:
@@ -164,7 +164,7 @@ router.post("/product", authMiddleware, productController.create);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UserMinimal'
+ *               $ref: '#/components/schemas/Product'
  *       400:
  *         description: Mauvaise requête
  *         content:
@@ -219,7 +219,7 @@ router.put("/product/:id", authMiddleware, productController.update);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UserMinimal'
+ *               $ref: '#/components/schemas/Product'
  *       403:
  *         description: Erreur d'appartenance
  *         content:
