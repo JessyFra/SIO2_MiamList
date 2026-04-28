@@ -1,0 +1,129 @@
+const express = require("express");
+const router = express.Router();
+const auth = require("../middlewares/authMiddleware");
+const recipeController = require("../controllers/recipeController");
+
+/**
+ * @swagger
+ * tags:
+ *   name: Recette
+ *   description: Gestion des recettes
+ */
+
+/**
+ * @swagger
+ * /recipes:
+ *   get:
+ *     summary: Récupérer toutes les recettes
+ *     tags: [Recette]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Recettes récupérées avec succès
+ */
+router.get("/recipes", auth, recipeController.getAll);
+
+/**
+ * @swagger
+ * /recipes/{id}:
+ *   get:
+ *     summary: Récupérer une recette par ID
+ *     tags: [Recette]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Recette récupérée avec succès
+ *       404:
+ *         description: Recette introuvable
+ */
+router.get("/recipes/:id", auth, recipeController.getOne);
+
+/**
+ * @swagger
+ * /recipes:
+ *   post:
+ *     summary: Créer une recette
+ *     tags: [Recette]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Gâteau à la fraise"
+ *               description:
+ *                 type: string
+ *                 example: "Gâteau d'anniversaire"
+ *     responses:
+ *       201:
+ *         description: Recette créée avec succès
+ */
+router.post("/recipes/", auth, recipeController.create);
+
+/**
+ * @swagger
+ * /recipes/{id}:
+ *   put:
+ *     summary: Modifier une recette
+ *     tags: [Recette]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Gâteau au chocolat"
+ *               description:
+ *                 type: string
+ *                 example: "Gâteau d'anniversaire"
+ *     responses:
+ *       200:
+ *         description: Recette modifiée avec succès
+ */
+router.put("/recipes/:id", auth, recipeController.update);
+
+/**
+ * @swagger
+ * /recipes/{id}:
+ *   delete:
+ *     summary: Supprimer une recette
+ *     tags: [Recette]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Recette supprimée avec succès
+ */
+router.delete("/recipes/:id", auth, recipeController.remove);
+
+module.exports = router;

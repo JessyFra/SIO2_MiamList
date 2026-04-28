@@ -50,14 +50,14 @@ public class LoginActivity extends AppCompatActivity {
                 body.put("email", email);
                 body.put("password", password);
 
-                Response response = ApiLinker.getInstance().postData("/api/auth/login", body, null);
+                Response response = ApiLinker.getInstance().postData("/api/login", body, null);
                 String responseBody = response.body().string();
 
                 runOnUiThread(() -> {
                     try {
                         JSONObject json = new JSONObject(responseBody);
                         if (response.isSuccessful()) {
-                            String token = json.getString("token");
+                            String token = json.getString("access_token");
 
                             // Sauvegarde du token
                             SharedPreferences prefs = getSharedPreferences("miamlist", MODE_PRIVATE);

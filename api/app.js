@@ -1,15 +1,19 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const routes = require("./src/routes");
+
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
+
+const authRoutes = require("./src/routes/authRoutes");
+const recipeRoutes = require("./src/routes/recipeRoutes");
+const productRoutes = require("./src/routes/productRoutes");
+const shoppingListRoutes = require("./src/routes/shoppingListRoutes");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Swagger
 const swaggerSpec = swaggerJsdoc({
     definition: {
         openapi: "3.0.0",
@@ -32,7 +36,6 @@ const swaggerSpec = swaggerJsdoc({
     },
     apis: ["./src/routes/*.js", "./src/models/*.js"],
 });
-app.use("/api/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const swaggerOptions = {
     swaggerOptions: {
@@ -40,13 +43,13 @@ const swaggerOptions = {
     },
 };
 
-app.use(
-    "/api/doc",
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerSpec, swaggerOptions),
-);
-// Routes
-app.use("/api", routes);
-app.use("/api", require("./src/routes/productRoutes"));
+
+app.use("/api/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerOptions));
+
+app.use("/api", authRoutes);
+app.use("/api", recipeRoutes);
+app.use("/api", productRoutes);
+app.use("/api", shoppingListRoutes);
+
 
 module.exports = app;

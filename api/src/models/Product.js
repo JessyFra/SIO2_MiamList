@@ -37,3 +37,23 @@ module.exports = (sequelize) => {
 
     return Product;
 };
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         label:
+ *           type: string
+ *           example: "Lait"
+ *         quantity:
+ *           type: number
+ *           example: 1.5
+ *         unit:
+ *           type: string
+ *           example: "L"
+ */

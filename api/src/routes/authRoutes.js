@@ -1,6 +1,15 @@
 const express = require("express");
 const router = express.Router();
+
 const authController = require("../controllers/authController");
+const authMiddleware = require('../middlewares/authMiddleware');
+
+/**
+ * @swagger
+ * tags:
+ *   name: Authentification
+ *   description: Gestion de l'authentification
+ */
 
 /**
  * @swagger
@@ -27,7 +36,7 @@ const authController = require("../controllers/authController");
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UserMinimal'
+ *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Mauvaise requête
  *         content:
@@ -109,5 +118,23 @@ router.post("/register", authController.register);
  *                   example: Invalid credentials
  */
 router.post("/login", authController.login);
+
+/**
+ * @swagger
+ * /me:
+ *   get:
+ *     summary: Récupération de son utilisateur
+ *     tags: [Authentification]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Utilisateur récupéré avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+router.get('/me', authMiddleware, authController.myself);
 
 module.exports = router;

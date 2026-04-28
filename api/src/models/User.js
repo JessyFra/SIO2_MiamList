@@ -34,22 +34,15 @@ module.exports = (sequelize) => {
  * @swagger
  * components:
  *   schemas:
- *     UserMinimal:
- *       type: object
+ *     User:
  *       properties:
  *         id:
  *           type: integer
  *           example: 1
- *         quizId:
- *           type: integer
- *           example: 1
- *         title:
+ *         email:
  *           type: string
- *           example: Le pensionnat de Godefroy a servi d'hôpital de guerre.
- *         isCorrect:
- *           type: boolean
- *           example: true
- *         answer:
+ *           example: "user@example.com"
+ *         password:
  *           type: string
- *           example: Entre 1914 et 1919, il a accueilli environ 190 lits pour les blessés.
+ *           example: "user"
  */

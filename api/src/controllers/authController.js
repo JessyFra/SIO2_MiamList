@@ -36,9 +36,20 @@ exports.login = async (req, res) => {
         return res.json(tokenData);
     } catch (error) {
         if (error.code === "INVALID_CREDENTIALS") {
-            if (email) {
-                logService.create(email);
-            }
+            return res.status(401).json({ error: error.message });
+        } else {
+            return res.status(500).json({ error: error.message });
+        }
+    }
+};
+
+exports.myself = async (req, res, _) => {
+    try {
+        const userData = await authService.myself(req.user.email);
+
+        return res.json(userData);
+    } catch (error) {
+        if (error.code === 'INVALID_CREDENTIALS') {
             return res.status(401).json({ error: error.message });
         } else {
             return res.status(500).json({ error: error.message });
