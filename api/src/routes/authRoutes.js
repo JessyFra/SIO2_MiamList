@@ -6,6 +6,13 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 /**
  * @swagger
+ * tags:
+ *   name: Authentification
+ *   description: Gestion de l'authentification
+ */
+
+/**
+ * @swagger
  * /register:
  *   post:
  *     summary: Inscription d'un utilisateur

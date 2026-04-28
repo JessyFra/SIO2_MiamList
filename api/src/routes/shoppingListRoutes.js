@@ -5,10 +5,17 @@ const shoppingListController = require("../controllers/shoppingListController");
 
 /**
  * @swagger
+ * tags:
+ *   name: Liste de courses
+ *   description: Gestion des listes de courses
+ */
+
+/**
+ * @swagger
  * /lists:
  *   get:
  *     summary: Récupérer toutes les listes de l'utilisateur connecté
- *     tags: [ShoppingLists]
+ *     tags: [Liste de courses]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -30,7 +37,7 @@ router.get("/lists", auth, shoppingListController.getAll);
  * /lists/{id}:
  *   get:
  *     summary: Récupérer une liste par son ID
- *     tags: [ShoppingLists]
+ *     tags: [Liste de courses]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -56,7 +63,7 @@ router.get("/lists/:id", auth, shoppingListController.getOne);
  * /lists:
  *   post:
  *     summary: Créer une nouvelle liste de courses
- *     tags: [ShoppingLists]
+ *     tags: [Liste de courses]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -86,7 +93,7 @@ router.post("/lists", auth, shoppingListController.create);
  * /lists/{id}:
  *   put:
  *     summary: Mettre à jour une liste de courses
- *     tags: [ShoppingLists]
+ *     tags: [Liste de courses]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -122,7 +129,7 @@ router.put("/lists/:id", auth, shoppingListController.update);
  * /lists/{id}:
  *   delete:
  *     summary: Supprimer une liste de courses
- *     tags: [ShoppingLists]
+ *     tags: [Liste de courses]
  *     security:
  *       - bearerAuth: []
  *     parameters:

@@ -5,10 +5,17 @@ const recipeController = require("../controllers/recipeController");
 
 /**
  * @swagger
+ * tags:
+ *   name: Recette
+ *   description: Gestion des recettes
+ */
+
+/**
+ * @swagger
  * /recipes:
  *   get:
  *     summary: Récupérer toutes les recettes
- *     tags: [Recipes]
+ *     tags: [Recette]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -22,7 +29,7 @@ router.get("/recipes", auth, recipeController.getAll);
  * /recipes/{id}:
  *   get:
  *     summary: Récupérer une recette par ID
- *     tags: [Recipes]
+ *     tags: [Recette]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -44,7 +51,7 @@ router.get("/recipes/:id", auth, recipeController.getOne);
  * /recipes:
  *   post:
  *     summary: Créer une recette
- *     tags: [Recipes]
+ *     tags: [Recette]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -71,7 +78,7 @@ router.post("/recipes/", auth, recipeController.create);
  * /recipes/{id}:
  *   put:
  *     summary: Modifier une recette
- *     tags: [Recipes]
+ *     tags: [Recette]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -104,7 +111,7 @@ router.put("/recipes/:id", auth, recipeController.update);
  * /recipes/{id}:
  *   delete:
  *     summary: Supprimer une recette
- *     tags: [Recipes]
+ *     tags: [Recette]
  *     security:
  *       - bearerAuth: []
  *     parameters:
