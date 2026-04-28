@@ -85,7 +85,14 @@ router.post("/recipes/", auth, recipeController.create);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Recipe'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Gâteau au chocolat"
+ *               description:
+ *                 type: string
+ *                 example: "Gâteau d'anniversaire"
  *     responses:
  *       200:
  *         description: Succès
