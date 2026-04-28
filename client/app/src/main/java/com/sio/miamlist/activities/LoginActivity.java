@@ -64,10 +64,14 @@ public class LoginActivity extends AppCompatActivity {
                             prefs.edit().putString("token", token).apply();
 
                             // Navigation vers les listes
-                            startActivity(new Intent(this, ShoppingListActivity.class));
+                            startActivity(new Intent(this, ShoppingListsActivity.class));
                             finish();
                         } else {
-                            showError(json.optString("message", "Erreur de connexion"));
+                            if (response.code() == 401) {
+                                showError(json.optString("message", "Identifiants invalide"));
+                            } else {
+                                showError(json.optString("message", response.message()));
+                            }
                         }
                     } catch (Exception e) {
                         showError("Erreur inattendue");

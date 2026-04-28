@@ -13,39 +13,41 @@ import com.sio.miamlist.R;
 
 import java.util.List;
 
-public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder> {
+public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdapter.ViewHolder> {
 
     public interface OnListActionListener {
         void onListClick(int id, String name);
         void onListDelete(int id);
     }
 
-    private final List<ListItem> items;
+    private final List<ListItem> listsItem;
     private final OnListActionListener listener;
 
-    public ShoppingListAdapter(List<ListItem> items, OnListActionListener listener) {
-        this.items    = items;
+    public ShoppingListsAdapter(List<ListItem> listsItem, OnListActionListener listener) {
+        this.listsItem = listsItem;
         this.listener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_shopping_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(
+            R.layout.item_shopping_lists, parent, false
+        );
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ListItem item = items.get(position);
-        holder.tvName.setText(item.name);
-        holder.itemView.setOnClickListener(v -> listener.onListClick(item.id, item.name));
-        holder.btnDelete.setOnClickListener(v -> listener.onListDelete(item.id));
+        ListItem listItem = listsItem.get(position);
+        holder.tvName.setText(listItem.name);
+        holder.itemView.setOnClickListener(v -> listener.onListClick(listItem.id, listItem.name));
+        holder.btnDelete.setOnClickListener(v -> listener.onListDelete(listItem.id));
     }
 
     @Override
-    public int getItemCount() { return items.size(); }
+    public int getItemCount() { return listsItem.size(); }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName;
