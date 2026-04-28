@@ -21,11 +21,9 @@ exports.update = async (req, res) => {
         !req.body.unit ||
         !req.params.id
     ) {
-        return res
-            .status(400)
-            .json({
-                error: "Parameters 'label', 'quantity' and 'unit' required",
-            });
+        return res.status(400).json({
+            error: "Parameters 'label', 'quantity' and 'unit' required",
+        });
     }
 
     req.body.id = req.params.id;
@@ -47,10 +45,23 @@ exports.update = async (req, res) => {
 
 exports.get = async (req, res) => {
     try {
-        console.log(req.params.id);
-        console.log(req.user.id);
         const product = await productService.get(req.params.id, req.user);
         res.status(200).json(product);
+    } catch (error) {
+        if (error.code === "PRODUCT_NOT_FOUND") {
+            return res.status(404).json({ error: error.message });
+        } else if (error.code === "FORBIDDEN") {
+            return res.status(403).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: error.message });
+        }
+    }
+};
+
+exports.getAll = async (req, res) => {
+    try {
+        const products = await productService.getAll(req.user);
+        res.status(200).json(products);
     } catch (error) {
         if (error.code === "PRODUCT_NOT_FOUND") {
             return res.status(404).json({ error: error.message });

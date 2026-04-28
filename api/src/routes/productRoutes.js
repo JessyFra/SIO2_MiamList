@@ -6,6 +6,24 @@ const productController = require("../controllers/productController");
 
 /**
  * @swagger
+ * /product:
+ *   get:
+ *     summary: Récupération des produits de l'Utilisateur
+ *     tags: [Produit]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Tous les produits de l'Utilisateur récupérés avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+router.get("/product", authMiddleware, productController.getAll);
+
+/**
+ * @swagger
  * /product/{id}:
  *   get:
  *     summary: Récupération d'un produit
@@ -25,7 +43,7 @@ const productController = require("../controllers/productController");
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UserMinimal'
+ *               $ref: '#/components/schemas/User'
  *       403:
  *         description: Erreur d'appartenance
  *         content:

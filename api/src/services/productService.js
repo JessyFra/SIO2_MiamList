@@ -46,6 +46,15 @@ exports.get = async (id, user) => {
     return product;
 };
 
+exports.getAll = async (user) => {
+    const products = await Product.findAll({
+        where: {
+            userId: user.id,
+        },
+    });
+    return products;
+};
+
 exports.update = async (data) => {
     const product = await Product.findByPk(data.id);
     console.log(data); // { label: 'Lait', quantity: 1.5, unit: 'Litre', id: '500', userId: 3 }
