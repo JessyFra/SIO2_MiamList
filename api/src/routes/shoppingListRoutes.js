@@ -5,13 +5,6 @@ const shoppingListController = require("../controllers/shoppingListController");
 
 /**
  * @swagger
- * tags:
- *   name: ShoppingLists
- *   description: Gestion des listes de courses
- */
-
-/**
- * @swagger
  * /lists:
  *   get:
  *     summary: Récupérer toutes les listes de l'utilisateur connecté
