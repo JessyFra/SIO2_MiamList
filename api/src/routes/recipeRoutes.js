@@ -15,7 +15,7 @@ const recipeController = require("../controllers/recipeController");
  *       200:
  *         description: Liste des recettes
  */
-router.get("/", auth, recipeController.getAll);
+router.get("/recipes", auth, recipeController.getAll);
 
 /**
  * @swagger
@@ -37,7 +37,7 @@ router.get("/", auth, recipeController.getAll);
  *       404:
  *         description: Recette introuvable
  */
-router.get("/:id", auth, recipeController.getOne);
+router.get("/recipes/:id", auth, recipeController.getOne);
 
 /**
  * @swagger
@@ -56,13 +56,15 @@ router.get("/:id", auth, recipeController.getOne);
  *             properties:
  *               name:
  *                 type: string
+ *                 example: "Gâteau à la fraise"
  *               description:
  *                 type: string
+ *                 example: "Gâteau d'anniversaire"
  *     responses:
  *       201:
  *         description: Recette créée
  */
-router.post("/", auth, recipeController.create);
+router.post("/recipes/", auth, recipeController.create);
 
 /**
  * @swagger
@@ -83,12 +85,19 @@ router.post("/", auth, recipeController.create);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Recipe'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Gâteau au chocolat"
+ *               description:
+ *                 type: string
+ *                 example: "Gâteau d'anniversaire"
  *     responses:
  *       200:
  *         description: Succès
  */
-router.put("/:id", auth, recipeController.update);
+router.put("/recipes/:id", auth, recipeController.update);
 
 /**
  * @swagger
@@ -108,6 +117,6 @@ router.put("/:id", auth, recipeController.update);
  *       204:
  *         description: Supprimé
  */
-router.delete("recipe/:id", auth, recipeController.remove);
+router.delete("/recipes/:id", auth, recipeController.remove);
 
 module.exports = router;
