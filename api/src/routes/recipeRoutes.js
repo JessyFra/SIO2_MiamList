@@ -56,8 +56,10 @@ router.get("/recipes/:id", auth, recipeController.getOne);
  *             properties:
  *               name:
  *                 type: string
+ *                 example: "Gâteau à la fraise"
  *               description:
  *                 type: string
+ *                 example: "Gâteau d'anniversaire"
  *     responses:
  *       201:
  *         description: Recette créée
