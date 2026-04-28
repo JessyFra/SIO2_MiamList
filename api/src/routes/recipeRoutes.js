@@ -5,15 +5,22 @@ const recipeController = require("../controllers/recipeController");
 
 /**
  * @swagger
+ * tags:
+ *   name: Recette
+ *   description: Gestion des recettes
+ */
+
+/**
+ * @swagger
  * /recipes:
  *   get:
  *     summary: Récupérer toutes les recettes
- *     tags: [Recipes]
+ *     tags: [Recette]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Liste des recettes
+ *         description: Recettes récupérées avec succès
  */
 router.get("/recipes", auth, recipeController.getAll);
 
@@ -22,7 +29,7 @@ router.get("/recipes", auth, recipeController.getAll);
  * /recipes/{id}:
  *   get:
  *     summary: Récupérer une recette par ID
- *     tags: [Recipes]
+ *     tags: [Recette]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -33,7 +40,7 @@ router.get("/recipes", auth, recipeController.getAll);
  *           type: integer
  *     responses:
  *       200:
- *         description: La recette
+ *         description: Recette récupérée avec succès
  *       404:
  *         description: Recette introuvable
  */
@@ -44,7 +51,7 @@ router.get("/recipes/:id", auth, recipeController.getOne);
  * /recipes:
  *   post:
  *     summary: Créer une recette
- *     tags: [Recipes]
+ *     tags: [Recette]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -62,7 +69,7 @@ router.get("/recipes/:id", auth, recipeController.getOne);
  *                 example: "Gâteau d'anniversaire"
  *     responses:
  *       201:
- *         description: Recette créée
+ *         description: Recette créée avec succès
  */
 router.post("/recipes/", auth, recipeController.create);
 
@@ -71,7 +78,7 @@ router.post("/recipes/", auth, recipeController.create);
  * /recipes/{id}:
  *   put:
  *     summary: Modifier une recette
- *     tags: [Recipes]
+ *     tags: [Recette]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -95,7 +102,7 @@ router.post("/recipes/", auth, recipeController.create);
  *                 example: "Gâteau d'anniversaire"
  *     responses:
  *       200:
- *         description: Succès
+ *         description: Recette modifiée avec succès
  */
 router.put("/recipes/:id", auth, recipeController.update);
 
@@ -104,7 +111,7 @@ router.put("/recipes/:id", auth, recipeController.update);
  * /recipes/{id}:
  *   delete:
  *     summary: Supprimer une recette
- *     tags: [Recipes]
+ *     tags: [Recette]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -115,7 +122,7 @@ router.put("/recipes/:id", auth, recipeController.update);
  *           type: integer
  *     responses:
  *       204:
- *         description: Supprimé
+ *         description: Recette supprimée avec succès
  */
 router.delete("/recipes/:id", auth, recipeController.remove);
 

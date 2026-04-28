@@ -5,15 +5,22 @@ const shoppingListController = require("../controllers/shoppingListController");
 
 /**
  * @swagger
+ * tags:
+ *   name: Liste de courses
+ *   description: Gestion des listes de courses
+ */
+
+/**
+ * @swagger
  * /lists:
  *   get:
  *     summary: Récupérer toutes les listes de l'utilisateur connecté
- *     tags: [ShoppingLists]
+ *     tags: [Liste de courses]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Liste des listes de courses
+ *         description: Listes de courses récupérées avec succès
  *         content:
  *           application/json:
  *             schema:
@@ -30,7 +37,7 @@ router.get("/lists", auth, shoppingListController.getAll);
  * /lists/{id}:
  *   get:
  *     summary: Récupérer une liste par son ID
- *     tags: [ShoppingLists]
+ *     tags: [Liste de courses]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -41,7 +48,7 @@ router.get("/lists", auth, shoppingListController.getAll);
  *           type: integer
  *     responses:
  *       200:
- *         description: La liste de courses
+ *         description: Liste de courses récupérée avec succès
  *         content:
  *           application/json:
  *             schema:
@@ -56,7 +63,7 @@ router.get("/lists/:id", auth, shoppingListController.getOne);
  * /lists:
  *   post:
  *     summary: Créer une nouvelle liste de courses
- *     tags: [ShoppingLists]
+ *     tags: [Liste de courses]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -71,7 +78,7 @@ router.get("/lists/:id", auth, shoppingListController.getOne);
  *                 example: "Courses du weekend"
  *     responses:
  *       201:
- *         description: Liste créée
+ *         description: Liste de courses créée avec succès
  *         content:
  *           application/json:
  *             schema:
@@ -86,7 +93,7 @@ router.post("/lists", auth, shoppingListController.create);
  * /lists/{id}:
  *   put:
  *     summary: Mettre à jour une liste de courses
- *     tags: [ShoppingLists]
+ *     tags: [Liste de courses]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -107,7 +114,7 @@ router.post("/lists", auth, shoppingListController.create);
  *                 example: "Courses de la semaine"
  *     responses:
  *       200:
- *         description: Liste mise à jour
+ *         description: Liste de courses modifiée avec succès
  *         content:
  *           application/json:
  *             schema:
@@ -122,7 +129,7 @@ router.put("/lists/:id", auth, shoppingListController.update);
  * /lists/{id}:
  *   delete:
  *     summary: Supprimer une liste de courses
- *     tags: [ShoppingLists]
+ *     tags: [Liste de courses]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -133,7 +140,7 @@ router.put("/lists/:id", auth, shoppingListController.update);
  *           type: integer
  *     responses:
  *       204:
- *         description: Liste supprimée
+ *         description: Liste de courses supprimée avec succès
  *       404:
  *         description: Liste introuvable
  */
