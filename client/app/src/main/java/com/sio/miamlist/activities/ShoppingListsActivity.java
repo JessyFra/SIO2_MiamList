@@ -16,7 +16,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.sio.miamlist.R;
-import com.sio.miamlist.adapters.ShoppingListAdapter;
+import com.sio.miamlist.adapters.ShoppingListsAdapter;
 import com.sio.miamlist.services.ApiLinker;
 
 import org.json.JSONArray;
@@ -29,8 +29,8 @@ import okhttp3.Response;
 
 public class ShoppingListsActivity extends AppCompatActivity {
 
-    private ShoppingListAdapter adapter;
-    private final List<ShoppingListAdapter.ListItem> items = new ArrayList<>();
+    private ShoppingListsAdapter adapter;
+    private final List<ShoppingListsAdapter.ListItem> listsItem = new ArrayList<>();
     private String token;
     private TextView tvListCount;
     private View layoutEmpty;
@@ -48,10 +48,13 @@ public class ShoppingListsActivity extends AppCompatActivity {
 
         RecyclerView recycler = findViewById(R.id.recyclerShoppingLists);
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ShoppingListAdapter(items, new ShoppingListAdapter.OnListActionListener() {
+        adapter = new ShoppingListsAdapter(listsItem, new ShoppingListsAdapter.OnListActionListener() {
             @Override
             public void onListClick(int id, String name) {
-                startActivity(new Intent(ShoppingListsActivity.this, ShoppingListActivity.class));
+                Intent intent = new Intent(ShoppingListsActivity.this, ShoppingListActivity.class);
+                intent.putExtra("id", id);
+
+                startActivity(intent);
             }
 
             @Override
@@ -75,8 +78,8 @@ public class ShoppingListsActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     try {
                         JSONArray array = new JSONArray(body);
-                        int oldSize = items.size();
-                        items.clear();
+                        int oldSize = listsItem.size();
+                        listsItem.clear();
 
                         if (oldSize > 0) {
                             adapter.notifyItemRangeRemoved(0, oldSize);
@@ -84,14 +87,14 @@ public class ShoppingListsActivity extends AppCompatActivity {
 
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject obj = array.getJSONObject(i);
-                            items.add(new ShoppingListAdapter.ListItem(
+                            listsItem.add(new ShoppingListsAdapter.ListItem(
                                 obj.getInt("id"),
                                 obj.getString("name")
                             ));
                         }
 
-                        if (!items.isEmpty()) {
-                            adapter.notifyItemRangeInserted(0, items.size());
+                        if (!listsItem.isEmpty()) {
+                            adapter.notifyItemRangeInserted(0, listsItem.size());
                         }
 
                         updateEmptyState();
@@ -106,7 +109,7 @@ public class ShoppingListsActivity extends AppCompatActivity {
     }
 
     private void updateEmptyState() {
-        int count = items.size();
+        int count = listsItem.size();
         tvListCount.setText(String.valueOf(count));
         layoutEmpty.setVisibility(count == 0 ? View.VISIBLE : View.GONE);
     }

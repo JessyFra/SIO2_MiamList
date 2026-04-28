@@ -15,4 +15,5 @@
     <string name="create_the_list">Create the list</string>
     <string name="delete">Delete</string>
     <string name="press_to_open">Press to open</string>
+    <string name="new_element">Nouveau élement</string>
 </resources>
