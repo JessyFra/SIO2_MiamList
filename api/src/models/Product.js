@@ -12,12 +12,19 @@ module.exports = (sequelize) => {
             label: { type: DataTypes.STRING(191), allowNull: false },
             quantity: { type: DataTypes.FLOAT, defaultValue: 1 },
             unit: { type: DataTypes.STRING(50), defaultValue: "" },
+            userId: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+            },
         },
         { tableName: "product" },
     );
 
     Product.associate = (db) => {
-        Product.belongsTo(db.User, { foreignKey: "userId" });
+        Product.belongsTo(db.User, {
+            foreignKey: "userId",
+            onDelete: "CASCADE",
+        });
         Product.belongsToMany(db.Recipe, {
             through: "RecipeProduct",
             foreignKey: "productId",
