@@ -47,5 +47,6 @@ app.use(
 );
 // Routes
 app.use("/api", routes);
+app.use("/api", require("./src/routes/productRoutes"));
 
 module.exports = app;
