@@ -11,7 +11,7 @@ import okhttp3.Response;
 
 public class ApiLinker {
 
-    private final String BASE_URL = ""; // Variable
+    private final String BASE_URL = "http://10.90.139.141:3000"; // Variable
     private static ApiLinker instance = null;
 
     public static ApiLinker getInstance() {

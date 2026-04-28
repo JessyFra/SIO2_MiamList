@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F4F1">
+
+    <!-- ══ AppBar éditorial ══ -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:elevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp">
+
+            <!-- Sous-titre discret -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:textColor="#CE7E4D"
+                android:letterSpacing="0.18"
+                android:textAllCaps="true"
+                android:layout_marginBottom="4dp" />
+
+            <!-- Titre principal -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/my_lists"
+                    android:textSize="28sp"
+                    android:fontFamily="sans-serif-thin"
+                    android:textColor="#1A1A1A"
+                    android:letterSpacing="0.01" />
+
+                <!-- Badge nombre de listes -->
+                <TextView
+                    android:id="@+id/tvListCount"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="#CE7E4D"
+                    android:background="@drawable/bg_icon_pill"
+                    android:text="0" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Séparateur très fin -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F0F0F0" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- ══ RecyclerView ══ -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerShoppingLists"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="96dp"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <!-- ══ État vide ══ -->
+    <LinearLayout
+        android:id="@+id/layoutEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="—"
+            android:textSize="32sp"
+            android:textColor="#CE7E4D"
+            android:fontFamily="sans-serif-thin"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_list_yet"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="#1A1A1A"
+            android:letterSpacing="0.02" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Appuyez sur le bouton + pour créer votre première liste"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="#AAAAAA"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp" />
+    </LinearLayout>
+
+    <!-- ══ FAB élégant ══ -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabAddList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="24dp"
+        android:text="@string/new_list"
+        android:textColor="#FFFFFF"
+        android:fontFamily="sans-serif-light"
+        android:textAllCaps="false"
+        android:letterSpacing="0.04"
+        app:icon="@android:drawable/ic_input_add"
+        app:iconTint="#FFFFFF"
+        app:backgroundTint="@color/accent"
+        app:elevation="6dp"
+        app:cornerRadius="16dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

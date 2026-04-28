@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                             prefs.edit().putString("token", token).apply();
 
                             // Navigation vers les listes
-                            startActivity(new Intent(this, ShoppingListActivity.class));
+                            startActivity(new Intent(this, ShoppingListsActivity.class));
                             finish();
                         } else {
                             if (response.code() == 401) {
