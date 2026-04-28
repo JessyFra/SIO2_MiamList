@@ -49,11 +49,20 @@ module.exports = (sequelize) => {
  *           example: 1
  *         label:
  *           type: string
- *           example: "Lait"
+ *           example: Lait
  *         quantity:
  *           type: number
  *           example: 1.5
  *         unit:
  *           type: string
- *           example: "L"
+ *           example: L
+ *         userId:
+ *           type: integer
+ *           example: 1
+ *         createAt:
+ *           type: string
+ *           example: 1970-01-01T00:00:00.000Z
+ *         updateAt:
+ *           type: string
+ *           example: 1970-01-01T00:00:00.000Z
  */

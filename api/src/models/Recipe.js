@@ -37,8 +37,17 @@ module.exports = (sequelize) => {
  *           example: 1
  *         name:
  *           type: string
- *           example: "Gâteau à la fraise"
+ *           example: Gâteau à la fraise
  *         description:
  *           type: string
- *           example: "Gâteau d'anniversaire"
+ *           example: Gâteau d'anniversaire
+ *         userId:
+ *           type: integer
+ *           example: 1
+ *         createAt:
+ *           type: string
+ *           example: 1970-01-01T00:00:00.000Z
+ *         updateAt:
+ *           type: string
+ *           example: 1970-01-01T00:00:00.000Z
  */
