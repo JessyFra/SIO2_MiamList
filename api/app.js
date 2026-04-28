@@ -46,6 +46,6 @@ app.use("/api/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerOptions
 
 app.use("/api", authRoutes);
 app.use("/api/recipes", recipeRoutes);
-app.use("/api/lists", shoppingListRoutes);
+app.use("/api", shoppingListRoutes);
 
 module.exports = app;
