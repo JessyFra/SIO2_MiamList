@@ -74,22 +74,32 @@ public class ShoppingListActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     try {
                         JSONArray array = new JSONArray(body);
+                        int oldSize = items.size();
                         items.clear();
+
+                        if (oldSize > 0) {
+                            adapter.notifyItemRangeRemoved(0, oldSize);
+                        }
+
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject obj = array.getJSONObject(i);
                             items.add(new ShoppingListAdapter.ListItem(
-                                    obj.getInt("id"),
-                                    obj.getString("name")
+                                obj.getInt("id"),
+                                obj.getString("name")
                             ));
                         }
-                        adapter.notifyDataSetChanged();
+
+                        if (!items.isEmpty()) {
+                            adapter.notifyItemRangeInserted(0, items.size());
+                        }
+
                         updateEmptyState();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.e("SHOPPINGLIST", e.toString());
                     }
                 });
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("SHOPPINGLIST", e.toString());
             }
         }).start();
     }
@@ -102,7 +112,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     private void showCreateListDialog() {
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.Theme_MiamList_BottomSheet);
-        View view = getLayoutInflater().inflate(R.layout.dialog_create_list, null);
+        View view = getLayoutInflater().inflate(R.layout.dialog_create_list, findViewById(android.R.id.content), false);
         dialog.setContentView(view);
 
         // Fond transparent pour que bg_bottom_sheet s'applique correctement
@@ -144,7 +154,7 @@ public class ShoppingListActivity extends AppCompatActivity {
                 Response response = ApiLinker.getInstance().postData("/api/lists", body, token);
                 if (response.isSuccessful()) loadLists();
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("SHOPPINGLIST", e.toString());
             }
         }).start();
     }
@@ -155,7 +165,7 @@ public class ShoppingListActivity extends AppCompatActivity {
                 Response response = ApiLinker.getInstance().deleteData("/api/lists/" + id, token);
                 if (response.isSuccessful()) loadLists();
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("SHOPPINGLIST", e.toString());
             }
         }).start();
     }
