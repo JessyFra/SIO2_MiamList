@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:fontFamily="sans-serif"
                 android:textColor="#CE7E4D"
                 android:letterSpacing="0.18"
