@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name" translatable="false">MiamList</string>
     <string name="app_slogan">Your shopping, simply</string>
+    <string name="login">Login</string>
+    <string name="log_in">Log in</string>
+    <string name="password">Password</string>
+    <string name="email">E-mail address</string>
+    <string name="great_to_see_you_again">Great to see you again</string>
+    <string name="new_list">New list</string>
+    <string name="no_list_yet">No list yet</string>
+    <string name="my_lists">My lists</string>
+    <string name="give_your_list_a_name">Give your list a name</string>
+    <string name="example_shopping">Example: Weekend shopping</string>
+    <string name="cancel">Cancel</string>
+    <string name="create_the_list">Create the list</string>
+    <string name="delete">Delete</string>
+    <string name="press_to_open">Press to open</string>
 </resources>

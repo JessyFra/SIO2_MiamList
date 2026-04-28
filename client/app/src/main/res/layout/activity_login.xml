@@ -77,7 +77,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Connexion"
+            android:text="@string/login"
             android:textSize="24sp"
             android:fontFamily="sans-serif-light"
             android:textColor="#1A1A1A"
@@ -87,7 +87,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ravi de vous revoir"
+            android:text="@string/great_to_see_you_again"
             android:textSize="13sp"
             android:fontFamily="sans-serif-light"
             android:textColor="#AAAAAA"
@@ -97,7 +97,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Adresse e-mail"
+            android:hint="@string/email"
             style="@style/Widget.MiamList.TextInputLayout"
             android:layout_marginBottom="16dp"
             app:hintTextColor="@color/on_surface_secondary"
@@ -117,7 +117,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Mot de passe"
+            android:hint="@string/password"
             style="@style/Widget.MiamList.TextInputLayout"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/on_surface_secondary"
@@ -140,7 +140,7 @@
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Se connecter"
+            android:text="@string/log_in"
             android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:fontFamily="sans-serif"
