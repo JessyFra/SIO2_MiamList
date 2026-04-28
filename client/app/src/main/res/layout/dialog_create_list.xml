@@ -23,6 +23,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_marginBottom="28dp">
@@ -52,7 +53,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nouvelle liste"
+                android:text="@string/new_list"
                 android:textSize="20sp"
                 android:fontFamily="sans-serif-light"
                 android:textColor="#1A1A1A"
@@ -61,7 +62,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Donnez un nom à votre liste"
+                android:text="@string/give_your_list_a_name"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif-light"
                 android:textColor="#AAAAAA"
@@ -74,7 +75,7 @@
         android:id="@+id/tilListName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ex : Courses du weekend"
+        android:hint="@string/example_shopping"
         style="@style/Widget.MiamList.TextInputLayout"
         android:layout_marginBottom="28dp"
         app:hintTextColor="@color/on_surface_secondary"
@@ -105,7 +106,7 @@
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:text="Annuler"
+            android:text="@string/cancel"
             android:textColor="#9E9E9E"
             android:textSize="14sp"
             android:fontFamily="sans-serif-light"
@@ -123,7 +124,7 @@
             android:layout_height="48dp"
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
-            android:text="Créer la liste"
+            android:text="@string/create_the_list"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:fontFamily="sans-serif"
