@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">MiamList</string>
+    <string name="app_name" translatable="false">MiamList</string>
+    <string name="app_slogan">Your shopping, simply</string>
 </resources>
