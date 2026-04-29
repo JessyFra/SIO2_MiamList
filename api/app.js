@@ -7,6 +7,7 @@ const swaggerJsdoc = require("swagger-jsdoc");
 
 const authRoutes = require("./src/routes/authRoutes");
 const recipeRoutes = require("./src/routes/recipeRoutes");
+const recipeProductRoutes = require("./src/routes/recipeProductRoutes");
 const productRoutes = require("./src/routes/productRoutes");
 const shoppingListRoutes = require("./src/routes/shoppingListRoutes");
 
@@ -43,13 +44,16 @@ const swaggerOptions = {
     },
 };
 
-
-app.use("/api/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerOptions));
+app.use(
+    "/api/doc",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, swaggerOptions),
+);
 
 app.use("/api", authRoutes);
 app.use("/api", recipeRoutes);
 app.use("/api", productRoutes);
+app.use("/api", recipeProductRoutes);
 app.use("/api", shoppingListRoutes);
-
 
 module.exports = app;
