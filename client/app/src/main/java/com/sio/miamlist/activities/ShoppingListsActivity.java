@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,15 +52,14 @@ public class ShoppingListsActivity extends AppCompatActivity {
         adapter = new ShoppingListsAdapter(listsItem, new ShoppingListsAdapter.OnListActionListener() {
             @Override
             public void onListClick(int id, String name) {
-                Intent intent = new Intent(ShoppingListsActivity.this, ShoppingListActivity.class);
+                Intent intent = new Intent(ShoppingListsActivity.this, ListItemActivity.class);
                 intent.putExtra("id", id);
-
                 startActivity(intent);
             }
 
             @Override
-            public void onListDelete(int id) {
-                deleteList(id);
+            public void onListDelete(int id, String name) {
+                showDeleteConfirmDialog(id, name);
             }
         });
         recycler.setAdapter(adapter);
@@ -68,6 +68,29 @@ public class ShoppingListsActivity extends AppCompatActivity {
         fab.setOnClickListener(v -> showCreateListDialog());
 
         loadLists();
+    }
+
+    private void showDeleteConfirmDialog(int id, String name) {
+        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.Theme_MiamList_BottomSheet);
+        View view = getLayoutInflater().inflate(R.layout.dialog_delete_confirm, findViewById(android.R.id.content), false);
+        dialog.setContentView(view);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextView tvMessage       = view.findViewById(R.id.tvDeleteMessage);
+        MaterialButton btnCancel = view.findViewById(R.id.btnCancelDelete);
+        MaterialButton btnDelete = view.findViewById(R.id.btnConfirmDelete);
+
+        tvMessage.setText("Voulez-vous vraiment supprimer la liste \"" + name + "\" ?");
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        btnDelete.setOnClickListener(v -> {
+            deleteList(id);
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 
     private void loadLists() {
@@ -88,8 +111,8 @@ public class ShoppingListsActivity extends AppCompatActivity {
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject obj = array.getJSONObject(i);
                             listsItem.add(new ShoppingListsAdapter.ListItem(
-                                obj.getInt("id"),
-                                obj.getString("name")
+                                    obj.getInt("id"),
+                                    obj.getString("name")
                             ));
                         }
 
@@ -119,7 +142,6 @@ public class ShoppingListsActivity extends AppCompatActivity {
         View view = getLayoutInflater().inflate(R.layout.dialog_create_list, findViewById(android.R.id.content), false);
         dialog.setContentView(view);
 
-        // Fond transparent pour que bg_bottom_sheet s'applique correctement
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
@@ -141,7 +163,6 @@ public class ShoppingListsActivity extends AppCompatActivity {
             }
         });
 
-        // Valider avec la touche "Entrée" du clavier
         editName.setOnEditorActionListener((tv, actionId, event) -> {
             btnCreate.performClick();
             return true;
