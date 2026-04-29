@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.sio.miamlist.R;
 
-public class ShoppingListActivity extends AppCompatActivity {
+public class ListItemActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,8 +14,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shopping_list);
 
         Intent intent = this.getIntent();
-        int truc = intent.getIntExtra("id", 0);
-
+        int listId = intent.getIntExtra("id", 0);
 
     }
 }
