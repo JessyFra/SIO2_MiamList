@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F7F4F1">
 
-    <!-- ══ AppBar éditorial ══ -->
+    <!-- ══ AppBar — même style que activity_shopping_lists ══ -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             android:paddingTop="20dp"
             android:paddingBottom="20dp">
 
-            <!-- Sous-titre discret -->
+            <!-- Sous-titre "MIAMLIST" -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 android:textAllCaps="true"
                 android:layout_marginBottom="4dp" />
 
-            <!-- Titre principal -->
+            <!-- Titre + badge -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,18 +42,20 @@
                 android:gravity="center_vertical">
 
                 <TextView
-                    android:id="@+id/title"
+                    android:id="@+id/tvListName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:text="Ma liste"
                     android:textSize="28sp"
                     android:fontFamily="sans-serif-thin"
                     android:textColor="#1A1A1A"
-                    android:letterSpacing="0.01" />
+                    android:letterSpacing="0.01"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
 
-                <!-- Badge nombre de listes -->
                 <TextView
-                    android:id="@+id/tvListCount"
+                    android:id="@+id/tvProductCount"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:gravity="center"
@@ -62,10 +64,12 @@
                     android:textColor="#CE7E4D"
                     android:background="@drawable/bg_icon_pill"
                     android:text="0" />
+
             </LinearLayout>
+
         </LinearLayout>
 
-        <!-- Séparateur très fin -->
+        <!-- Séparateur -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -75,7 +79,7 @@
 
     <!-- ══ RecyclerView ══ -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerShoppingLists"
+        android:id="@+id/recyclerProducts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingStart="20dp"
@@ -107,7 +111,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_list_yet"
+            android:text="Aucun produit pour l'instant"
             android:textSize="16sp"
             android:fontFamily="sans-serif-light"
             android:textColor="#1A1A1A"
@@ -116,7 +120,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Appuyez sur le bouton + pour créer votre première liste"
+            android:text="Appuyez sur + pour ajouter votre premier produit"
             android:textSize="12sp"
             android:fontFamily="sans-serif-light"
             android:textColor="#AAAAAA"
@@ -124,16 +128,17 @@
             android:layout_marginTop="8dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp" />
+
     </LinearLayout>
 
-    <!-- ══ FAB élégant ══ -->
+    <!-- ══ FAB ══ -->
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fabAddList"
+        android:id="@+id/fabAddProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
-        android:text="@string/new_element"
+        android:text="Ajouter"
         android:textColor="#FFFFFF"
         android:fontFamily="sans-serif-light"
         android:textAllCaps="false"
