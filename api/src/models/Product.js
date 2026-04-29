@@ -10,7 +10,6 @@ module.exports = (sequelize) => {
                 autoIncrement: true,
             },
             label: { type: DataTypes.STRING(191), allowNull: false },
-            quantity: { type: DataTypes.FLOAT, defaultValue: 1 },
             unit: { type: DataTypes.STRING(50), defaultValue: "" },
             userId: {
                 type: DataTypes.INTEGER,
@@ -30,7 +29,7 @@ module.exports = (sequelize) => {
             foreignKey: "productId",
         });
         Product.belongsToMany(db.ShoppingList, {
-            through: "ListItem",
+            through: "ItemList",
             foreignKey: "productId",
         });
     };
@@ -50,9 +49,6 @@ module.exports = (sequelize) => {
  *         label:
  *           type: string
  *           example: Lait
- *         quantity:
- *           type: number
- *           example: 1.5
  *         unit:
  *           type: string
  *           example: L

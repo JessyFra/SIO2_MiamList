@@ -25,7 +25,6 @@ module.exports = {
                 allowNull: false,
             },
             label: { type: Sequelize.STRING(191), allowNull: false },
-            quantity: { type: Sequelize.FLOAT, defaultValue: 1 },
             unit: { type: Sequelize.STRING(50), defaultValue: "" },
             userId: {
                 type: Sequelize.INTEGER,
@@ -91,7 +90,7 @@ module.exports = {
             updatedAt: { type: Sequelize.DATE, allowNull: false },
         });
 
-        await queryInterface.createTable("list_item", {
+        await queryInterface.createTable("item_list", {
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
@@ -116,7 +115,7 @@ module.exports = {
     },
 
     async down(queryInterface) {
-        await queryInterface.dropTable("list_item");
+        await queryInterface.dropTable("item_list");
         await queryInterface.dropTable("shopping_list");
         await queryInterface.dropTable("recipe_product");
         await queryInterface.dropTable("recipe");

@@ -4,7 +4,6 @@ exports.create = async (data, user_p) => {
     const user = await User.findByPk(user_p.id);
     const product = await Product.create({
         label: data.label,
-        quantity: data.quantity ?? null,
         unit: data.unit ?? null,
     });
     await product.update({ userId: user.id });
@@ -37,7 +36,6 @@ exports.get = async (id, user) => {
         throw error;
     }
 
-    console.log(product);
     if (user.id !== product.userId) {
         const error = new Error("An user can only see his own product");
         error.code = "FORBIDDEN";
@@ -57,7 +55,6 @@ exports.getAll = async (user) => {
 
 exports.update = async (data) => {
     const product = await Product.findByPk(data.id);
-    console.log(data); // { label: 'Lait', quantity: 1.5, unit: 'Litre', id: '500', userId: 3 }
     if (!product) {
         const error = new Error("Product not found");
         error.code = "PRODUCT_NOT_FOUND";
@@ -72,7 +69,6 @@ exports.update = async (data) => {
 
     await product.update({
         label: data.label,
-        quantity: data.quantity,
         unit: data.unit,
     });
     return product;
