@@ -28,18 +28,19 @@
         android:gravity="center_vertical"
         android:layout_marginBottom="16dp">
 
-        <!-- Icône corbeille -->
+        <!-- Icône corbeille (même que dans la liste) -->
         <FrameLayout
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:background="@drawable/bg_icon_pill"
             android:layout_marginEnd="14dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:text="🗑"
-                android:textSize="20sp" />
+                android:src="@android:drawable/ic_menu_delete"
+                android:contentDescription="@string/delete"
+                app:tint="#CCCCCC" />
         </FrameLayout>
 
         <LinearLayout
