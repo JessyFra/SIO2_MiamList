@@ -75,7 +75,54 @@ exports.getAllByShoppingListId = async (id, user_p) => {
                 as: "product",
             },
         ],
-        attributes: { exclude: ["productId"] },
+        attributes: { exclude: ["productId"], include: ["id"] },
     });
     return itemLists;
+};
+
+exports.patch = async (id, user_p) => {
+    const user = await User.findByPk(user_p.id);
+
+    const itemList = await ItemList.findByPk(body.id);
+
+    if (!itemList) {
+        const error = new Error("Item list not found");
+        error.code = "ITEM_LIST_NOT_FOUND";
+        throw error;
+    }
+
+    const shoppingList = await ShoppingList.findByPk(itemList.shoppingId);
+
+    if (shoppingList.userId !== user.id) {
+        const error = new Error("An user can only modify his own item list");
+        error.code = "FORBIDDEN";
+        throw error;
+    }
+
+    await itemList.update({
+        quantity: body.quantity ?? itemList.quantity,
+        checked: body.checked ?? itemList.checked,
+    });
+
+    return itemList;
+};
+
+exports.delete = async (id, user_p) => {
+    const user = await User.findByPk(user_p.id);
+    const itemList = await ItemList.findByPk(id);
+    if (!itemList) {
+        const error = new Error("Item list not found");
+        error.code = "ITEM_LIST_NOT_FOUND";
+        throw error;
+    }
+
+    const shoppingList = await ShoppingList.findByPk(itemList.shoppingId);
+    if (shoppingList.userId !== user.id) {
+        const error = new Error("An user can only delete his own item list");
+        error.code = "FORBIDDEN";
+        throw error;
+    }
+
+    await itemList.destroy();
+    return itemList;
 };
