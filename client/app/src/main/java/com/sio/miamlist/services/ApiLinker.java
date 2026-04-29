@@ -11,7 +11,7 @@ import okhttp3.Response;
 
 public class ApiLinker {
 
-    private final String BASE_URL = "http://10.90.139.141:3000"; // Variable
+    private final String BASE_URL = "http://10.0.2.2:3000"; // Variable
     private static ApiLinker instance = null;
 
     public static ApiLinker getInstance() {
@@ -22,55 +22,61 @@ public class ApiLinker {
     }
 
     public Response getData(String url, String token) {
-        OkHttpClient client;
-        Response response;
         try {
-            client = new OkHttpClient();
-            Request request;
-            if (token != null) {
-                request = new Request.Builder()
-                        .url(BASE_URL + url)
-                        .header("Authorization", "Bearer " + token)
-                        .build();
-            } else {
-                request = new Request.Builder()
-                        .url(BASE_URL + url)
-                        .build();
-            }
-            Call call = client.newCall(request);
-            response = call.execute();
+            OkHttpClient client = new OkHttpClient();
+            Request.Builder builder = new Request.Builder().url(BASE_URL + url);
+            if (token != null) builder.header("Authorization", "Bearer " + token);
+            return client.newCall(builder.build()).execute();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return response;
     }
 
     public Response postData(String url, JSONObject jsonObject, String token) {
-        OkHttpClient client;
-        Response response;
         try {
-            client = new OkHttpClient();
+            OkHttpClient client = new OkHttpClient();
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
-            Request request;
-            if (token != null) {
-                request = new Request.Builder()
-                        .url(BASE_URL + url)
-                        .header("Authorization", "Bearer " + token)
-                        .post(body)
-                        .build();
-            } else {
-                request = new Request.Builder()
-                        .url(BASE_URL + url)
-                        .post(body)
-                        .build();
-            }
-            Call call = client.newCall(request);
-            response = call.execute();
+            Request.Builder builder = new Request.Builder()
+                    .url(BASE_URL + url)
+                    .post(body);
+            if (token != null) builder.header("Authorization", "Bearer " + token);
+            return client.newCall(builder.build()).execute();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return response;
+    }
+
+    public Response putData(String url, JSONObject jsonObject, String token) {
+        try {
+            OkHttpClient client = new OkHttpClient();
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+            Request request = new Request.Builder()
+                    .url(BASE_URL + url)
+                    .header("Authorization", "Bearer " + token)
+                    .put(body)
+                    .build();
+            return client.newCall(request).execute();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Response patchData(String url, JSONObject jsonObject, String token) {
+        try {
+            OkHttpClient client = new OkHttpClient();
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+            Request request = new Request.Builder()
+                    .url(BASE_URL + url)
+                    .header("Authorization", "Bearer " + token)
+                    .patch(body)
+                    .build();
+            return client.newCall(request).execute();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Response deleteData(String url, String token) {

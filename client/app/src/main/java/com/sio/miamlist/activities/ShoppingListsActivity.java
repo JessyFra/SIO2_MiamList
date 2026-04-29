@@ -54,6 +54,7 @@ public class ShoppingListsActivity extends AppCompatActivity {
             public void onListClick(int id, String name) {
                 Intent intent = new Intent(ShoppingListsActivity.this, ListItemActivity.class);
                 intent.putExtra("id", id);
+                intent.putExtra("name", name);
                 startActivity(intent);
             }
 
