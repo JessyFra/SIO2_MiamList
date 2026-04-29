@@ -50,3 +50,42 @@ exports.getAllByShoppingListId = async (req, res) => {
         }
     }
 };
+
+exports.patch = async (req, res) => {
+    try {
+        if (req.body.productId || req.body.shoppingId) {
+            return res
+                .status(400)
+                .json("Parameters 'shoppingId' and 'productId' are forbidden");
+        }
+        if (Object.keys(req.body).length === 0) {
+            return res.status(400).json("Patch require parameters");
+        }
+        req.body.id = req.params.id;
+        const itemList = await itemListService.patch(req.body, req.user);
+        res.status(200).json(itemList);
+    } catch (error) {
+        if (error.code === "ITEM_LIST_NOT_FOUND") {
+            return res.status(404).json({ error: error.message });
+        } else if (error.code === "FORBIDDEN") {
+            return res.status(403).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: error.message });
+        }
+    }
+};
+
+exports.delete = async (req, res) => {
+    try {
+        const itemList = await itemListService.delete(req.params.id, req.user);
+        res.status(200).json(itemList);
+    } catch (error) {
+        if (error.code === "ITEM_LIST_NOT_FOUND") {
+            return res.status(404).json({ error: error.message });
+        } else if (error.code === "FORBIDDEN") {
+            return res.status(403).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: error.message });
+        }
+    }
+};
