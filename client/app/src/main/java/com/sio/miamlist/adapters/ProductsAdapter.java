@@ -4,7 +4,7 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -112,7 +112,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        CheckBox    cbProduct;
+        MaterialCheckBox cbProduct;
         TextView    tvLabel;
         TextView    tvQtyUnit;
         ImageButton btnEdit;

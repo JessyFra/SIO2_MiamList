@@ -4,6 +4,11 @@ module.exports = (sequelize, DataTypes) => {
     const ItemList = sequelize.define(
         "ItemList",
         {
+            id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+            },
             quantity: { type: DataTypes.FLOAT, defaultValue: 1 },
             checked: { type: DataTypes.BOOLEAN, defaultValue: false },
         },
