@@ -1,9 +1,9 @@
-const { Recipe } = require("../models");
+const { Recipe, RecipeProduct } = require("../models");
 
 exports.getAll = async (req, res) => {
     try {
         const recipes = await Recipe.findAll({
-            where: { userId: req.user.id }
+            where: { userId: req.user.id },
         });
         return res.json(recipes);
     } catch (error) {
@@ -14,7 +14,7 @@ exports.getAll = async (req, res) => {
 exports.getOne = async (req, res) => {
     try {
         const recipe = await Recipe.findOne({
-            where: { id: req.params.id, userId: req.user.id }
+            where: { id: req.params.id, userId: req.user.id },
         });
         if (!recipe) {
             return res.status(404).json({ error: "Recipe not found" });
@@ -29,14 +29,44 @@ exports.create = async (req, res) => {
     try {
         const { name, description } = req.body;
         if (!name) {
-            return res.status(400).json({ error: "Parameters 'name' is required" });
+            return res
+                .status(400)
+                .json({ error: "Parameters 'name' is required" });
         }
         const recipe = await Recipe.create({
             name,
-            description,
-            userId: req.user.id
+            description: description ?? null,
+            userId: req.user.id,
         });
-        return res.status(201).json(recipe);
+        let products = [];
+        if (req.body.products) {
+            // Valider d'abord
+            for (const product of req.body.products) {
+                if (
+                    !product.quantity ||
+                    !product.checked ||
+                    !product.productId
+                ) {
+                    return res.status(400).json({
+                        error: "Element of parameter 'products' require 'quantity', 'checked' and 'productId'",
+                    });
+                }
+            }
+            const createdProducts = await Promise.all(
+                req.body.products.map((product) =>
+                    RecipeProduct.create({
+                        quantity: product.quantity,
+                        checked: product.checked,
+                        productId: product.productId,
+                        recipeId: recipe.id,
+                    }),
+                ),
+            );
+            products.push(...createdProducts);
+        }
+        return res
+            .status(201)
+            .json({ recipe: recipe, products: products.length });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -45,7 +75,7 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const recipe = await Recipe.findOne({
-            where: { id: req.params.id, userId: req.user.id }
+            where: { id: req.params.id, userId: req.user.id },
         });
         if (!recipe) {
             return res.status(404).json({ error: "Recipe not found" });
@@ -60,7 +90,7 @@ exports.update = async (req, res) => {
 exports.remove = async (req, res) => {
     try {
         const recipe = await Recipe.findOne({
-            where: { id: req.params.id, userId: req.user.id }
+            where: { id: req.params.id, userId: req.user.id },
         });
         if (!recipe) {
             return res.status(404).json({ error: "Recipe not found" });

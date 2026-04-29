@@ -63,8 +63,8 @@ router.get(
  *               quantity:
  *                 type: number
  *                 example: 1.5
- *               recipeId:
- *                 type: integer
+ *               checked:
+ *                 type: boolean
  *                 example: 1
  *               productId:
  *                 type: integer
