@@ -17,7 +17,7 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
 
     public interface OnListActionListener {
         void onListClick(int id, String name);
-        void onListDelete(int id);
+        void onListDelete(int id, String name);
     }
 
     private final List<ListItem> listsItem;
@@ -34,7 +34,6 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
         View view = LayoutInflater.from(parent.getContext()).inflate(
             R.layout.item_shopping_lists, parent, false
         );
-
         return new ViewHolder(view);
     }
 
@@ -43,7 +42,7 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
         ListItem listItem = listsItem.get(position);
         holder.tvName.setText(listItem.name);
         holder.itemView.setOnClickListener(v -> listener.onListClick(listItem.id, listItem.name));
-        holder.btnDelete.setOnClickListener(v -> listener.onListDelete(listItem.id));
+        holder.btnDelete.setOnClickListener(v -> listener.onListDelete(listItem.id, listItem.name));
     }
 
     @Override
@@ -59,7 +58,6 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
         }
     }
 
-    // Modèle simple
     public static class ListItem {
         public int id;
         public String name;
