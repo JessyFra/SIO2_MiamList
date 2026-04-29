@@ -14,15 +14,9 @@ exports.create = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-    if (
-        !req.user.id ||
-        !req.body.label ||
-        !req.body.quantity ||
-        !req.body.unit ||
-        !req.params.id
-    ) {
+    if (!req.user.id || !req.body.label || !req.body.unit || !req.params.id) {
         return res.status(400).json({
-            error: "Parameters 'label', 'quantity' and 'unit' required",
+            error: "Parameters 'label' and 'unit' required",
         });
     }
 

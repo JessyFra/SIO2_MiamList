@@ -25,7 +25,6 @@ module.exports = {
                 allowNull: false,
             },
             label: { type: Sequelize.STRING(191), allowNull: false },
-            quantity: { type: Sequelize.FLOAT, defaultValue: 1 },
             unit: { type: Sequelize.STRING(50), defaultValue: "" },
             userId: {
                 type: Sequelize.INTEGER,
@@ -72,8 +71,6 @@ module.exports = {
                 references: { model: "product", key: "id" },
                 onDelete: "CASCADE",
             },
-            createdAt: { type: Sequelize.DATE, allowNull: false },
-            updatedAt: { type: Sequelize.DATE, allowNull: false },
         });
 
         await queryInterface.createTable("shopping_list", {
@@ -93,7 +90,7 @@ module.exports = {
             updatedAt: { type: Sequelize.DATE, allowNull: false },
         });
 
-        await queryInterface.createTable("list_item", {
+        await queryInterface.createTable("item_list", {
             id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
@@ -102,7 +99,7 @@ module.exports = {
             },
             quantity: { type: Sequelize.FLOAT, defaultValue: 1 },
             checked: { type: Sequelize.BOOLEAN, defaultValue: false },
-            listId: {
+            shoppingId: {
                 type: Sequelize.INTEGER,
                 references: { model: "shopping_list", key: "id" },
                 onDelete: "CASCADE",
@@ -118,7 +115,7 @@ module.exports = {
     },
 
     async down(queryInterface) {
-        await queryInterface.dropTable("list_item");
+        await queryInterface.dropTable("item_list");
         await queryInterface.dropTable("shopping_list");
         await queryInterface.dropTable("recipe_product");
         await queryInterface.dropTable("recipe");

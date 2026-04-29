@@ -6,7 +6,7 @@ const productController = require("../controllers/productController");
 
 /**
  * @swagger
- * /product:
+ * /products:
  *   get:
  *     summary: Récupération des produits de l'Utilisateur
  *     tags: [Produit]
@@ -20,11 +20,11 @@ const productController = require("../controllers/productController");
  *             schema:
  *               $ref: '#/components/schemas/Product'
  */
-router.get("/product", authMiddleware, productController.getAll);
+router.get("/products", authMiddleware, productController.getAll);
 
 /**
  * @swagger
- * /product/{id}:
+ * /products/{id}:
  *   get:
  *     summary: Récupération d'un produit
  *     tags: [Produit]
@@ -65,11 +65,11 @@ router.get("/product", authMiddleware, productController.getAll);
  *                   type: string
  *                   example: Product not found
  */
-router.get("/product/:id", authMiddleware, productController.get);
+router.get("/products/:id", authMiddleware, productController.get);
 
 /**
  * @swagger
- * /product:
+ * /products:
  *   post:
  *     summary: Création d'un produit
  *     tags: [Produit]
@@ -87,9 +87,6 @@ router.get("/product/:id", authMiddleware, productController.get);
  *               label:
  *                 type: string
  *                 example: Lait
- *               quantity:
- *                 type: float
- *                 example: 1.5
  *               unit:
  *                 type: string
  *                 example: Litre
@@ -121,11 +118,11 @@ router.get("/product/:id", authMiddleware, productController.get);
  *                   type: string
  *                   example: Email already used
  */
-router.post("/product", authMiddleware, productController.create);
+router.post("/products", authMiddleware, productController.create);
 
 /**
  * @swagger
- * /product/{id}:
+ * /products/{id}:
  *   put:
  *     summary: Mise à jour d'un produit
  *     tags: [Produit]
@@ -146,15 +143,11 @@ router.post("/product", authMiddleware, productController.create);
  *             type: object
  *             required:
  *               - label
- *               - quantity
  *               - unit
  *             properties:
  *               label:
  *                 type: string
  *                 example: Lait
- *               quantity:
- *                 type: float
- *                 example: 1.5
  *               unit:
  *                 type: string
  *                 example: Litre
@@ -196,11 +189,11 @@ router.post("/product", authMiddleware, productController.create);
  *                   type: string
  *                   example: Product not found
  */
-router.put("/product/:id", authMiddleware, productController.update);
+router.put("/products/:id", authMiddleware, productController.update);
 
 /**
  * @swagger
- * /product/{id}:
+ * /products/{id}:
  *   delete:
  *     summary: Suppression d'un produit
  *     tags: [Produit]
@@ -241,6 +234,6 @@ router.put("/product/:id", authMiddleware, productController.update);
  *                   type: string
  *                   example: Product not found
  */
-router.delete("/product/:id", authMiddleware, productController.delete);
+router.delete("/products/:id", authMiddleware, productController.delete);
 
 module.exports = router;

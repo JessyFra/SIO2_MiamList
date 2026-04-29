@@ -12,7 +12,7 @@ const shoppingListController = require("../controllers/shoppingListController");
 
 /**
  * @swagger
- * /lists:
+ * /shopping-lists:
  *   get:
  *     summary: Récupérer toutes les listes de l'utilisateur connecté
  *     tags: [Liste de courses]
@@ -30,11 +30,11 @@ const shoppingListController = require("../controllers/shoppingListController");
  *       401:
  *         description: Non authentifié
  */
-router.get("/lists", auth, shoppingListController.getAll);
+router.get("/shopping-lists", auth, shoppingListController.getAll);
 
 /**
  * @swagger
- * /lists/{id}:
+ * /shopping-lists/{id}:
  *   get:
  *     summary: Récupérer une liste par son ID
  *     tags: [Liste de courses]
@@ -56,11 +56,11 @@ router.get("/lists", auth, shoppingListController.getAll);
  *       404:
  *         description: Liste introuvable
  */
-router.get("/lists/:id", auth, shoppingListController.getOne);
+router.get("/shopping-lists/:id", auth, shoppingListController.getOne);
 
 /**
  * @swagger
- * /lists:
+ * /shopping-lists:
  *   post:
  *     summary: Créer une nouvelle liste de courses
  *     tags: [Liste de courses]
@@ -86,11 +86,11 @@ router.get("/lists/:id", auth, shoppingListController.getOne);
  *       400:
  *         description: Paramètre manquant
  */
-router.post("/lists", auth, shoppingListController.create);
+router.post("/shopping-lists", auth, shoppingListController.create);
 
 /**
  * @swagger
- * /lists/{id}:
+ * /shopping-lists/{id}:
  *   put:
  *     summary: Mettre à jour une liste de courses
  *     tags: [Liste de courses]
@@ -122,11 +122,11 @@ router.post("/lists", auth, shoppingListController.create);
  *       404:
  *         description: Liste introuvable
  */
-router.put("/lists/:id", auth, shoppingListController.update);
+router.put("/shopping-lists/:id", auth, shoppingListController.update);
 
 /**
  * @swagger
- * /lists/{id}:
+ * /shopping-lists/{id}:
  *   delete:
  *     summary: Supprimer une liste de courses
  *     tags: [Liste de courses]
@@ -144,6 +144,6 @@ router.put("/lists/:id", auth, shoppingListController.update);
  *       404:
  *         description: Liste introuvable
  */
-router.delete("/lists/:id", auth, shoppingListController.remove);
+router.delete("/shopping-lists/:id", auth, shoppingListController.remove);
 
 module.exports = router;

@@ -67,11 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(new Intent(this, ShoppingListsActivity.class));
                             finish();
                         } else {
-                            if (response.code() == 401) {
-                                showError(json.optString("message", "Identifiants invalide"));
-                            } else {
-                                showError(json.optString("message", response.message()));
-                            }
+                            showError(json.optString("message", "Erreur de connexion"));
                         }
                     } catch (Exception e) {
                         showError("Erreur inattendue");
