@@ -10,6 +10,7 @@ const recipeRoutes = require("./src/routes/recipeRoutes");
 const recipeProductRoutes = require("./src/routes/recipeProductRoutes");
 const productRoutes = require("./src/routes/productRoutes");
 const shoppingListRoutes = require("./src/routes/shoppingListRoutes");
+const itemListRoutes = require("./src/routes/itemListRoutes");
 
 const app = express();
 app.use(cors());
@@ -55,5 +56,6 @@ app.use("/api", recipeRoutes);
 app.use("/api", productRoutes);
 app.use("/api", recipeProductRoutes);
 app.use("/api", shoppingListRoutes);
+app.use("/api", itemListRoutes);
 
 module.exports = app;

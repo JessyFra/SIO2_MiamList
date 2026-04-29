@@ -6,7 +6,7 @@ const recipeProductController = require("../controllers/recipeProductController"
 
 /**
  * @swagger
- * /recipe/{id}/recipe-product:
+ * /recipe/{id}/recipe-products:
  *   get:
  *     summary: Récupération des produits d'une recette
  *     tags: [Produit de recette]
@@ -30,14 +30,14 @@ const recipeProductController = require("../controllers/recipeProductController"
  *                 $ref: '#/components/schemas/RecipeProductFull'
  */
 router.get(
-    "/recipe/:id/recipe-product",
+    "/recipe/:id/recipe-products",
     authMiddleware,
     recipeProductController.getByRecipeId,
 );
 
 /**
  * @swagger
- * /recipe/{id}/recipe-product:
+ * /recipe/{id}/recipe-products:
  *   post:
  *     summary: Ajouter un produit à une recette
  *     tags: [Produit de recette]
@@ -91,7 +91,26 @@ router.get(
  *               properties:
  *                 error:
  *                   type: string
- *                   example: Parameters 'recipeId' and 'productId' required
+ *             examples:
+ *               parametersRequiered:
+ *                 summary: Manque de paramètre
+ *                 value:
+ *                   error: Recipe not found
+ *               productNotFound:
+ *                 summary: Référence à un produit inexistant
+ *                 value:
+ *                   error: Product not found
+
+ *       403:
+ *         description: Erreur d'appartenance
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: An user can only modify his own recipe
  *       404:
  *         description: Non trouvé
  *         content:
@@ -110,26 +129,16 @@ router.get(
  *                 summary: Référence à un produit inexistant
  *                 value:
  *                   error: Product not found
- *       403:
- *         description: Erreur d'appartenance
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: An user can only modify his own recipe
  */
 router.post(
-    "/recipe/:id/recipe-product",
+    "/recipe/:id/recipe-products",
     authMiddleware,
     recipeProductController.create,
 );
 
 /**
  * @swagger
- * /recipe-product/{id}:
+ * /recipe-products/{id}:
  *   patch:
  *     summary: Modifier un produit d'une recette
  *     tags: [Produit de recette]
@@ -193,14 +202,14 @@ router.post(
  *                   example: An user can only modify his own recipe
  */
 router.patch(
-    "/recipe-product/:id",
+    "/recipe-products/:id",
     authMiddleware,
     recipeProductController.patchQuantity,
 );
 
 /**
  * @swagger
- * /recipe-product/{id}:
+ * /recipe-products/{id}:
  *   delete:
  *     summary: Suppression d'un produit d'une recette
  *     tags: [Produit de recette]
@@ -224,7 +233,7 @@ router.patch(
  *                 $ref: '#/components/schemas/RecipeProductFull'
  */
 router.delete(
-    "/recipe-product/:id",
+    "/recipe-products/:id",
     authMiddleware,
     recipeProductController.delete,
 );

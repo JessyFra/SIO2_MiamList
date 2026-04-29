@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { User, Product, Recipe, ShoppingList, ListItem } = require("../models");
+const { User, Product, Recipe, ShoppingList } = require("../models");
 
 exports.register = async (email, password) => {
     const existing = await User.findOne({
@@ -15,9 +15,9 @@ exports.register = async (email, password) => {
     }
 
     const hashed = await bcrypt.hash(password, 10);
-    const user = await User.create({ email, password: hashed});
+    const user = await User.create({ email, password: hashed });
 
-    return { id: user.id, email: user.email};
+    return { id: user.id, email: user.email };
 };
 
 exports.login = async (email, password) => {
@@ -62,20 +62,21 @@ exports.myself = async (email) => {
         where: { email },
         include: [
             {
-                model: Product
+                model: Product,
             },
             {
-                model: Recipe, as: "Recipes",
+                model: Recipe,
+                as: "Recipes",
                 include: [
                     {
-                        model: Product
-                    }
-                ]
+                        model: Product,
+                    },
+                ],
             },
             {
-                model: ShoppingList
-            }
-        ]
+                model: ShoppingList,
+            },
+        ],
     });
 
     if (!user) {

@@ -1,6 +1,6 @@
 module.exports = {
     async up(queryInterface) {
-        await queryInterface.bulkInsert("list_item", [
+        await queryInterface.bulkInsert("item_list", [
             // "Courses de la semaine" (shoppingId: 1) — admin
             {
                 id: 1,
@@ -115,6 +115,6 @@ module.exports = {
         ]);
     },
     async down(queryInterface) {
-        await queryInterface.bulkDelete("list_item", null, {});
+        await queryInterface.bulkDelete("item_list", null, {});
     },
 };
