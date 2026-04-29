@@ -116,8 +116,7 @@ public class ProductsFragment extends Fragment {
     private void loadProducts() {
         new Thread(() -> {
             try {
-                Response response = ApiLinker.getInstance()
-                        .getData("/api/lists/" + listId + "/items", token);
+                Response response = ApiLinker.getInstance().getData("/api/shopping-lists/" + listId + "/item-lists", token);
                 String body = response.body().string();
 
                 requireActivity().runOnUiThread(() -> {
@@ -131,8 +130,8 @@ public class ProductsFragment extends Fragment {
                             JSONObject obj     = array.getJSONObject(i);
                             JSONObject product = obj.getJSONObject("product");
                             items.add(new ProductsAdapter.ProductItem(
-                                    obj.getInt("id"),
-                                    product.getInt("id"),
+                                    obj.optInt("id", 0),
+                                    product.optInt("id", 0),
                                     product.getString("label"),
                                     (float) obj.optDouble("quantity", 1),
                                     product.optString("unit", ""),

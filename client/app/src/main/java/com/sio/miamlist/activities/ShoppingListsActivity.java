@@ -97,7 +97,7 @@ public class ShoppingListsActivity extends AppCompatActivity {
     private void loadLists() {
         new Thread(() -> {
             try {
-                Response response = ApiLinker.getInstance().getData("/api/lists", token);
+                Response response = ApiLinker.getInstance().getData("/api/shopping-lists", token);
                 String body = response.body().string();
                 runOnUiThread(() -> {
                     try {
@@ -177,7 +177,7 @@ public class ShoppingListsActivity extends AppCompatActivity {
             try {
                 JSONObject body = new JSONObject();
                 body.put("name", name);
-                Response response = ApiLinker.getInstance().postData("/api/lists", body, token);
+                Response response = ApiLinker.getInstance().postData("/api/shopping-lists", body, token);
                 if (response.isSuccessful()) loadLists();
             } catch (Exception e) {
                 Log.e("SHOPPINGLIST", e.toString());
@@ -188,7 +188,7 @@ public class ShoppingListsActivity extends AppCompatActivity {
     private void deleteList(int id) {
         new Thread(() -> {
             try {
-                Response response = ApiLinker.getInstance().deleteData("/api/lists/" + id, token);
+                Response response = ApiLinker.getInstance().deleteData("/api/shopping-lists/" + id, token);
                 if (response.isSuccessful()) loadLists();
             } catch (Exception e) {
                 Log.e("SHOPPINGLIST", e.toString());
