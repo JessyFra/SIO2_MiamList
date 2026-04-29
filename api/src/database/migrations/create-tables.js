@@ -72,8 +72,6 @@ module.exports = {
                 references: { model: "product", key: "id" },
                 onDelete: "CASCADE",
             },
-            createdAt: { type: Sequelize.DATE, allowNull: false },
-            updatedAt: { type: Sequelize.DATE, allowNull: false },
         });
 
         await queryInterface.createTable("shopping_list", {
@@ -102,7 +100,7 @@ module.exports = {
             },
             quantity: { type: Sequelize.FLOAT, defaultValue: 1 },
             checked: { type: Sequelize.BOOLEAN, defaultValue: false },
-            listId: {
+            shoppingId: {
                 type: Sequelize.INTEGER,
                 references: { model: "shopping_list", key: "id" },
                 onDelete: "CASCADE",
