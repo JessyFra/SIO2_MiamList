@@ -1,6 +1,5 @@
 package com.sio.miamlist.fragments;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.sio.miamlist.R;
 import com.sio.miamlist.adapters.ProductsAdapter;
 import com.sio.miamlist.services.ApiLinker;
+import com.sio.miamlist.services.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -65,13 +65,13 @@ public class ProductsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             listId   = getArguments().getInt(ARG_ID, 0);
             listName = getArguments().getString(ARG_NAME, "Produits");
         }
-        SharedPreferences prefs = requireActivity()
-                .getSharedPreferences("miamlist", MODE_PRIVATE);
-        token = prefs.getString("token", null);
+
+        token = SessionManager.getToken(getContext());
     }
 
     @Nullable

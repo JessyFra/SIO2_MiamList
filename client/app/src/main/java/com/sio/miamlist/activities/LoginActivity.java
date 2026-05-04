@@ -1,20 +1,17 @@
 package com.sio.miamlist.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.sio.miamlist.R;
 import com.sio.miamlist.services.ApiLinker;
+import com.sio.miamlist.services.SessionManager;
 
 import org.json.JSONObject;
 
@@ -36,10 +33,6 @@ public class LoginActivity extends AppCompatActivity {
         Button btnLogin = findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(v -> login());
-
-        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-        controller.hide(WindowInsetsCompat.Type.systemBars());
     }
 
     private void login() {
@@ -67,8 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                             String token = json.getString("access_token");
 
                             // Sauvegarde du token
-                            SharedPreferences prefs = getSharedPreferences("miamlist", MODE_PRIVATE);
-                            prefs.edit().putString("token", token).apply();
+                            SessionManager.saveToken(token, this);
 
                             // Navigation vers les listes
                             startActivity(new Intent(this, ShoppingListsActivity.class));
