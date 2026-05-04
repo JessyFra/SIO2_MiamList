@@ -1,14 +1,14 @@
 package com.sio.miamlist.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
-import com.sio.miamlist.R;
+import com.sio.miamlist.services.SessionManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,13 +16,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        controller.hide(WindowInsetsCompat.Type.systemBars());
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        boolean isConnected = SessionManager.getToken(getApplicationContext()).isEmpty();
+        Intent intent;
+
+        if (isConnected) {
+            intent = new Intent(this, LoginActivity.class);
+        } else {
+            intent = new Intent(this, ShoppingListsActivity.class);
+        }
+
+        startActivity(intent);
+        finish();
     }
 }

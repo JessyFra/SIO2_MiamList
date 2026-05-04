@@ -2,7 +2,6 @@ package com.sio.miamlist.services;
 
 import org.json.JSONObject;
 
-import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -11,7 +10,7 @@ import okhttp3.Response;
 
 public class ApiLinker {
 
-    private final String BASE_URL = "http://10.0.2.2:3000"; // Variable
+    private final String BASE_URL = "http://10.90.139.141:3000"; // Variable
     private static ApiLinker instance = null;
 
     public static ApiLinker getInstance() {

@@ -17,7 +17,7 @@ public class SessionManager {
 
     public static String getToken(Context context) {
         SharedPreferences prefs = context.getSharedPreferences("MIAMLIST-SESSION", MODE_PRIVATE);
-        return prefs.getString("token", null);
+        return prefs.getString("token", "");
     }
 
     public static void deleteToken(Context context) {

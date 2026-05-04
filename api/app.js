@@ -51,6 +51,11 @@ app.use(
     swaggerUi.setup(swaggerSpec, swaggerOptions),
 );
 
+app.get("/api/doc.json", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(swaggerSpec);
+});
+
 app.use("/api", authRoutes);
 app.use("/api", recipeRoutes);
 app.use("/api", productRoutes);

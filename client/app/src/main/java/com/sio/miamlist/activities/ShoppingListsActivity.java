@@ -1,13 +1,12 @@
 package com.sio.miamlist.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +18,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.sio.miamlist.R;
 import com.sio.miamlist.adapters.ShoppingListsAdapter;
 import com.sio.miamlist.services.ApiLinker;
+import com.sio.miamlist.services.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,8 +41,7 @@ public class ShoppingListsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_lists);
 
-        SharedPreferences prefs = getSharedPreferences("miamlist", MODE_PRIVATE);
-        token = prefs.getString("token", null);
+        token = SessionManager.getToken(getApplicationContext());
 
         tvListCount = findViewById(R.id.tvListCount);
         layoutEmpty = findViewById(R.id.layoutEmpty);
@@ -189,7 +188,10 @@ public class ShoppingListsActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 Response response = ApiLinker.getInstance().deleteData("/api/shopping-lists/" + id, token);
-                if (response.isSuccessful()) loadLists();
+
+                if (response.isSuccessful()) {
+                    loadLists();
+                }
             } catch (Exception e) {
                 Log.e("SHOPPINGLIST", e.toString());
             }
