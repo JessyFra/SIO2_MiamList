@@ -105,9 +105,6 @@ router.get("/recipes/:id", auth, recipeController.getOne);
  *                     quantity:
  *                       type: number
  *                       example: 2.5
- *                     checked:
- *                       type: integer
- *                       example: 1
  *                     productId:
  *                       type: integer
  *                       example: 1
