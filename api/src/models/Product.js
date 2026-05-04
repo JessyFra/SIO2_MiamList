@@ -26,10 +26,12 @@ module.exports = (sequelize) => {
         });
         Product.belongsToMany(db.Recipe, {
             through: "RecipeProduct",
+            as: "recipes",
             foreignKey: "productId",
         });
         Product.belongsToMany(db.ShoppingList, {
             through: "ItemList",
+            as: "shoppingLists",
             foreignKey: "productId",
         });
     };
@@ -61,4 +63,13 @@ module.exports = (sequelize) => {
  *         updateAt:
  *           type: string
  *           example: 1970-01-01T00:00:00.000Z
+ *     ProductFull:
+ *       allOf:
+ *         - $ref: '#/components/schemas/Product'
+ *         - type: object
+ *           properties:
+ *             products:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
  */

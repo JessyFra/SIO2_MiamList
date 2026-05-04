@@ -36,7 +36,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/UserMinimal'
  *       400:
  *         description: Mauvaise requête
  *         content:
@@ -133,7 +133,7 @@ router.post("/login", authController.login);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/UserFull'
  */
 router.get("/me", authMiddleware, authController.myself);
 
