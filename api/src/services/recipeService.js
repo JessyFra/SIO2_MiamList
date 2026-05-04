@@ -12,20 +12,20 @@ exports.create = async (body, user) => {
         description: description ?? null,
         userId: user.id,
     });
+
     let products = [];
-    let tempProduct;
     if (body.products) {
         // Valider d'abord
         for (const product of body.products) {
-            if (!product.quantity || !product.checked || !product.productId) {
+            if (!product.quantity || !product.productId) {
                 const error = new Error(
-                    "Element of parameter 'products' require 'quantity', 'checked' and 'productId'",
+                    "Element of parameter 'products' require 'quantity' and 'productId'",
                 );
                 error.code = "BAD_REQUEST";
                 throw error;
             }
 
-            tempProduct = await Product.findByPk(product.productId, null);
+            const tempProduct = await Product.findByPk(product.productId);
             if (!tempProduct) {
                 const error = new Error("Product not found");
                 error.code = "PRODUCT_NOT_FOUND";
@@ -39,18 +39,31 @@ exports.create = async (body, user) => {
             }
         }
 
-        const createdProducts = await Promise.all(
-            body.products.map((product) =>
-                RecipeProduct.create({
+        // Fusionner les produits avec le même productId
+        const mergedProducts = {};
+        for (const product of body.products) {
+            if (mergedProducts[product.productId]) {
+                mergedProducts[product.productId].quantity += product.quantity;
+            } else {
+                mergedProducts[product.productId] = {
                     quantity: product.quantity,
-                    checked: product.checked,
-                    productId: product.productId,
+                };
+            }
+        }
+
+        // Créer les RecipeProduct fusionnés
+        const createdProducts = await Promise.all(
+            Object.entries(mergedProducts).map(([productId, data]) =>
+                RecipeProduct.create({
+                    quantity: data.quantity,
+                    productId: parseInt(productId),
                     recipeId: recipe.id,
                 }),
             ),
         );
         products.push(...createdProducts);
     }
+
     return { recipe: recipe, products: products.length };
 };
 
