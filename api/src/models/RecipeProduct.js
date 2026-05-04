@@ -41,6 +41,7 @@ module.exports = (sequelize) => {
         RecipeProduct.belongsTo(db.Recipe, {
             foreignKey: "recipeId",
             onDelete: "CASCADE",
+            as: "recipe",
         });
         RecipeProduct.belongsTo(db.Product, {
             foreignKey: "productId",

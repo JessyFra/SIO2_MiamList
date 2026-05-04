@@ -1,11 +1,10 @@
-const { Recipe, RecipeProduct } = require("../models");
+const { Recipe, RecipeProduct, Product } = require("../models");
+const recipeService = require("../services/recipeService");
 
 exports.getAll = async (req, res) => {
     try {
-        const recipes = await Recipe.findAll({
-            where: { userId: req.user.id },
-        });
-        return res.json(recipes);
+        const recipes = await recipeService.getAll(req.user.id);
+        return res.status(200).json(recipes);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -13,90 +12,60 @@ exports.getAll = async (req, res) => {
 
 exports.getOne = async (req, res) => {
     try {
-        const recipe = await Recipe.findOne({
-            where: { id: req.params.id, userId: req.user.id },
-        });
-        if (!recipe) {
-            return res.status(404).json({ error: "Recipe not found" });
-        }
-        return res.json(recipe);
+        const recipe = await recipeService.getOne(req.params.id, req.user.id);
+        return res.status(200).json(recipe);
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        if (error.code === "FORBIDDEN") {
+            return res.status(403).json({ error: error.message });
+        } else if (error.code === "RECIPE_NOT_FOUND") {
+            return res.status(404).json({ error: error.message });
+        } else {
+            return res.status(500).json({ error: error.message });
+        }
     }
 };
 
 exports.create = async (req, res) => {
     try {
-        const { name, description } = req.body;
-        if (!name) {
-            return res
-                .status(400)
-                .json({ error: "Parameters 'name' is required" });
-        }
-        const recipe = await Recipe.create({
-            name,
-            description: description ?? null,
-            userId: req.user.id,
-        });
-        let products = [];
-        if (req.body.products) {
-            // Valider d'abord
-            for (const product of req.body.products) {
-                if (
-                    !product.quantity ||
-                    !product.checked ||
-                    !product.productId
-                ) {
-                    return res.status(400).json({
-                        error: "Element of parameter 'products' require 'quantity', 'checked' and 'productId'",
-                    });
-                }
-            }
-            const createdProducts = await Promise.all(
-                req.body.products.map((product) =>
-                    RecipeProduct.create({
-                        quantity: product.quantity,
-                        checked: product.checked,
-                        productId: product.productId,
-                        recipeId: recipe.id,
-                    }),
-                ),
-            );
-            products.push(...createdProducts);
-        }
-        return res
-            .status(201)
-            .json({ recipe: recipe, products: products.length });
+        const recipe = await recipeService.create(req.body, req.user);
+        return res.status(201).json(recipe);
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        if (error.code === "BAD_REQUEST") {
+            return res.status(400).json({ error: error.message });
+        } else if (error.code === "FORBIDDEN") {
+            return res.status(403).json({ error: error.message });
+        } else if (error.code === "PRODUCT_NOT_FOUND") {
+            return res.status(404).json({ error: error.message });
+        } else {
+            return res.status(500).json({ error: error.message });
+        }
     }
 };
 
 exports.update = async (req, res) => {
     try {
-        const recipe = await Recipe.findOne({
-            where: { id: req.params.id, userId: req.user.id },
-        });
-        if (!recipe) {
-            return res.status(404).json({ error: "Recipe not found" });
-        }
-        await recipe.update(req.body);
-        return res.json(recipe);
+        const recipe = await recipeService.update(
+            req.params.id,
+            req.body,
+            req.user.id,
+        );
+        return res.status(200).json(recipe);
     } catch (error) {
+        if (error.code === "BAD_REQUEST") {
+            return res.status(400).json({ error: error.message });
+        } else if (error.code === "FORBIDDEN") {
+            return res.status(403).json({ error: error.message });
+        } else if (error.code === "RECIPE_NOT_FOUND") {
+            return res.status(404).json({ error: error.message });
+        }
         return res.status(500).json({ error: error.message });
     }
 };
 
 exports.remove = async (req, res) => {
     try {
-        const recipe = await Recipe.findOne({
-            where: { id: req.params.id, userId: req.user.id },
-        });
-        if (!recipe) {
-            return res.status(404).json({ error: "Recipe not found" });
-        }
-        await recipe.destroy();
-        return res.status(204).send();
+        const recipe = await recipeService.delete(req.params.id, req.user.id);
+        return res.status(200).json(recipe);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }

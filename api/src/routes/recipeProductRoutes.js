@@ -189,7 +189,7 @@ router.post(
  *               properties:
  *                 error:
  *                   type: string
- *                   example: Parameters 'quantity' required
+ *                   example: Parameter 'quantity' is required
  *       403:
  *         description: Erreur d'appartenance
  *         content:
@@ -231,6 +231,26 @@ router.patch(
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/RecipeProductFull'
+ *       403:
+ *         description: Erreur d'appartenance
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: An user can only delete his own recipe
+ *       404:
+ *         description: Non trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Recipe-Product not found
  */
 router.delete(
     "/recipe-products/:id",

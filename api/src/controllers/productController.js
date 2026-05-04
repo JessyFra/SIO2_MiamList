@@ -16,7 +16,7 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
     if (!req.user.id || !req.body.label || !req.body.unit || !req.params.id) {
         return res.status(400).json({
-            error: "Parameters 'label' and 'unit' required",
+            error: "Parameters 'label' and 'unit' are required",
         });
     }
 
@@ -54,7 +54,7 @@ exports.get = async (req, res) => {
 
 exports.getAll = async (req, res) => {
     try {
-        const products = await productService.getAll(req.user);
+        const products = await productService.getAll(req.user, req.query);
         res.status(200).json(products);
     } catch (error) {
         if (error.code === "PRODUCT_NOT_FOUND") {

@@ -1,4 +1,5 @@
 const { Product, User } = require("../models");
+const { Op, sequelize } = require("sequelize");
 
 exports.create = async (data, user_p) => {
     const user = await User.findByPk(user_p.id);
@@ -44,12 +45,19 @@ exports.get = async (id, user) => {
     return product;
 };
 
-exports.getAll = async (user) => {
-    const products = await Product.findAll({
-        where: {
-            userId: user.id,
-        },
-    });
+exports.getAll = async (user, query) => {
+    const label = query.label ?? "";
+
+    const where = { userId: user.id };
+
+    if (label) {
+        where.label = {
+            [Op.like]: `%${label}%`,
+        };
+    }
+
+    const products = await Product.findAll({ where });
+
     return products;
 };
 

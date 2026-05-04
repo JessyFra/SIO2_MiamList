@@ -27,8 +27,6 @@ const shoppingListController = require("../controllers/shoppingListController");
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/ShoppingList'
- *       401:
- *         description: Non authentifié
  */
 router.get("/shopping-lists", auth, shoppingListController.getAll);
 
@@ -53,8 +51,26 @@ router.get("/shopping-lists", auth, shoppingListController.getAll);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ShoppingList'
+ *       403:
+ *         description: Erreur d'appartenance
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: An user can only see his own shoppingList
  *       404:
- *         description: Liste introuvable
+ *         description: Non trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: ShoppingList not found
  */
 router.get("/shopping-lists/:id", auth, shoppingListController.getOne);
 
@@ -71,6 +87,8 @@ router.get("/shopping-lists/:id", auth, shoppingListController.getOne);
  *       content:
  *         application/json:
  *           schema:
+ *             required:
+ *               - name
  *             type: object
  *             properties:
  *               name:
@@ -84,7 +102,15 @@ router.get("/shopping-lists/:id", auth, shoppingListController.getOne);
  *             schema:
  *               $ref: '#/components/schemas/ShoppingList'
  *       400:
- *         description: Paramètre manquant
+ *         description: Mauvaise requête
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Parameter 'name' is required
  */
 router.post("/shopping-lists", auth, shoppingListController.create);
 
@@ -119,8 +145,36 @@ router.post("/shopping-lists", auth, shoppingListController.create);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ShoppingList'
+ *       400:
+ *         description: Mauvaise requête
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Parameter 'name' is required
+ *       403:
+ *         description: Erreur d'appartenance
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: An user can only update his own shoppingLists
  *       404:
- *         description: Liste introuvable
+ *         description: Non trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: ShoppingList not found
  */
 router.put("/shopping-lists/:id", auth, shoppingListController.update);
 
@@ -139,10 +193,32 @@ router.put("/shopping-lists/:id", auth, shoppingListController.update);
  *         schema:
  *           type: integer
  *     responses:
- *       204:
+ *       200:
  *         description: Liste de courses supprimée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ShoppingList'
+ *       403:
+ *         description: Erreur d'appartenance
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: An user can only delete his own shoppingLists
  *       404:
- *         description: Liste introuvable
+ *         description: Non trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: ShoppingList not found
  */
 router.delete("/shopping-lists/:id", auth, shoppingListController.remove);
 
