@@ -22,7 +22,7 @@ exports.create = async (req, res) => {
     if (!req.body.productId) {
         return res
             .status(400)
-            .json({ error: "Parameters 'productId' required" });
+            .json({ error: "Parameter 'productId' is required" });
     }
     req.body.id = req.params.id;
     try {
@@ -46,7 +46,7 @@ exports.create = async (req, res) => {
 exports.patchQuantity = async (req, res) => {
     if (!req.body.quantity) {
         return res.status(400).json({
-            error: "Parameters 'quantity' required",
+            error: "Parameter 'quantity' is required",
         });
     }
 

@@ -36,5 +36,14 @@ module.exports = (sequelize) => {
  *           example: 1
  *         name:
  *           type: string
- *           example: "Anniversaire Nathan"
+ *           example: Anniversaire Nathan
+ *         createdAt:
+ *           type: string
+ *           example: 1970-01-01T00:00:00.000Z
+ *         updatedAt:
+ *           type: string
+ *           example: 1970-01-01T00:00:00.000Z
+ *         userId:
+ *           type: integer
+ *           example: 1
  */

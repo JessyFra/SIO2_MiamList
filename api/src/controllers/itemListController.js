@@ -9,7 +9,7 @@ exports.createByShoppingListId = async (req, res) => {
             !req.body.productId
         ) {
             return res.status(400).json({
-                error: "Parameters 'quantity', 'checked' and 'productId' required",
+                error: "Parameters 'quantity', 'checked' and 'productId' are required",
             });
         }
         if (req.body.quantity === 0) {

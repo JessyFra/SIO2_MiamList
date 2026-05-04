@@ -134,7 +134,7 @@ router.get("/recipes/:id", auth, recipeController.getOne);
  *               recipeBadRequest:
  *                 summary: Manque de paramètre dans la recette
  *                 value:
- *                   error: Parameters 'name' is required
+ *                   error: Parameter 'name' is required
  *               recipeProductBadRequest:
  *                 summary: Manque de paramètre dans la liste des products
  *                 value:

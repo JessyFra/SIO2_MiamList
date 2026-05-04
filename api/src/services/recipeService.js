@@ -3,7 +3,7 @@ const { Recipe, RecipeProduct, Product } = require("../models");
 exports.create = async (body, user) => {
     const { name, description } = body;
     if (!name) {
-        const error = new Error("Parameters 'name' is required");
+        const error = new Error("Parameter 'name' is required");
         error.code = "BAD_REQUEST";
         throw error;
     }

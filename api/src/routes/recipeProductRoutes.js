@@ -189,7 +189,7 @@ router.post(
  *               properties:
  *                 error:
  *                   type: string
- *                   example: Parameters 'quantity' required
+ *                   example: Parameter 'quantity' is required
  *       403:
  *         description: Erreur d'appartenance
  *         content:
