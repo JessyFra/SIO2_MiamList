@@ -8,9 +8,9 @@ exports.register = async (req, res) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return res
-                .status(400)
-                .json({ error: "Parameters 'email' and 'password' required" });
+            return res.status(400).json({
+                error: "Parameters 'email' and 'password' are required",
+            });
         }
 
         const user = await authService.register(email, password);
@@ -30,7 +30,9 @@ exports.login = async (req, res) => {
         if (!email || !password) {
             return res
                 .status(400)
-                .json({ error: "Parameters 'email' and 'password' required" });
+                .json({
+                    error: "Parameters 'email' and 'password' are required",
+                });
         }
         const tokenData = await authService.login(email, password);
         return res.json(tokenData);
@@ -49,7 +51,7 @@ exports.myself = async (req, res, _) => {
 
         return res.json(userData);
     } catch (error) {
-        if (error.code === 'INVALID_CREDENTIALS') {
+        if (error.code === "INVALID_CREDENTIALS") {
             return res.status(401).json({ error: error.message });
         } else {
             return res.status(500).json({ error: error.message });

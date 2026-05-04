@@ -62,7 +62,7 @@ router.get("/products", authMiddleware, productController.getAll);
  *                   type: string
  *                   example: An user can only see his own product
  *       404:
- *         description: Produit non trouvé
+ *         description: Non trouvé
  *         content:
  *           application/json:
  *             schema:
@@ -113,7 +113,7 @@ router.get("/products/:id", authMiddleware, productController.get);
  *               properties:
  *                 error:
  *                   type: string
- *                   example: Parameters 'label' required
+ *                   example: Parameter 'label' is required
  *       409:
  *         description: Conflit
  *         content:
@@ -174,7 +174,7 @@ router.post("/products", authMiddleware, productController.create);
  *               properties:
  *                 error:
  *                   type: string
- *                   example: Parameters 'label', 'quantity' and 'unit' required
+ *                   example: Parameters 'label', 'quantity' and 'unit' are required
  *       403:
  *         description: Erreur d'appartenance
  *         content:
@@ -186,7 +186,7 @@ router.post("/products", authMiddleware, productController.create);
  *                   type: string
  *                   example: An user can only modify his own product
  *       404:
- *         description: Produit non trouvé
+ *         description: Non trouvé
  *         content:
  *           application/json:
  *             schema:
@@ -231,7 +231,7 @@ router.put("/products/:id", authMiddleware, productController.update);
  *                   type: string
  *                   example: An user can only delete his own product
  *       404:
- *         description: Produit non trouvé
+ *         description: Non trouvé
  *         content:
  *           application/json:
  *             schema:

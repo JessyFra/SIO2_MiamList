@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const authController = require("../controllers/authController");
-const authMiddleware = require('../middlewares/authMiddleware');
+const authMiddleware = require("../middlewares/authMiddleware");
 
 /**
  * @swagger
@@ -46,7 +46,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
  *               properties:
  *                 error:
  *                   type: string
- *                   example: Parameters 'email' and 'password' required
+ *                   example: Parameters 'email' and 'password' are required
  *       409:
  *         description: Conflit
  *         content:
@@ -105,7 +105,7 @@ router.post("/register", authController.register);
  *               properties:
  *                 error:
  *                   type: string
- *                   example: Parameters 'email' and 'password' required
+ *                   example: Parameters 'email' and 'password' are required
  *       401:
  *         description: Identifiants invalides
  *         content:
@@ -135,6 +135,6 @@ router.post("/login", authController.login);
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-router.get('/me', authMiddleware, authController.myself);
+router.get("/me", authMiddleware, authController.myself);
 
 module.exports = router;

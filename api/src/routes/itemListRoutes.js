@@ -190,7 +190,7 @@ router.patch("/item-lists/:id", authMiddleware, itemListController.patch);
  *               parametersRequiered:
  *                 summary: Manque de paramètre
  *                 value:
- *                   error: Parameters 'quantity', 'checked' and 'productId' required
+ *                   error: Parameters 'quantity', 'checked' and 'productId' are required
  *               quantityError:
  *                 summary: Ajoute une quantité nulle
  *                 value:
