@@ -20,9 +20,10 @@ public class MainActivity extends AppCompatActivity {
         controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         controller.hide(WindowInsetsCompat.Type.systemBars());
 
+        boolean isConnected = SessionManager.getToken(getApplicationContext()).isEmpty();
         Intent intent;
 
-        if (SessionManager.getToken(getApplicationContext()).isEmpty()) {
+        if (isConnected) {
             intent = new Intent(this, LoginActivity.class);
         } else {
             intent = new Intent(this, ShoppingListsActivity.class);
