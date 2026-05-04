@@ -212,7 +212,7 @@ public class ProductsFragment extends Fragment {
         }).start();
     }
 
-    //  PUT /api/list-items/{id} 
+    //  PUT /api/item-lists{id} 
 
     private void updateProduct(ProductsAdapter.ProductItem item,
                                String label, float quantity, String unit) {
@@ -223,7 +223,7 @@ public class ProductsFragment extends Fragment {
                 body.put("quantity", quantity);
                 body.put("unit", unit);
                 Response r = ApiLinker.getInstance()
-                        .putData("/api/list-items/" + item.listItemId, body, token);
+                        .patchData("/api/item-lists/" + item.listItemId, body, token);
                 if (r.isSuccessful()) requireActivity().runOnUiThread(this::loadProducts);
             } catch (Exception e) { Log.e(TAG, e.getMessage()); }
         }).start();
@@ -250,19 +250,19 @@ public class ProductsFragment extends Fragment {
         dialog.show();
     }
 
-    //  DELETE /api/list-items/{id} 
+    //  DELETE /api/item-lists{id} 
 
     private void deleteProduct(ProductsAdapter.ProductItem item) {
         new Thread(() -> {
             try {
                 Response r = ApiLinker.getInstance()
-                        .deleteData("/api/list-items/" + item.listItemId, token);
+                        .deleteData("/api/item-lists/" + item.listItemId, token);
                 if (r.isSuccessful()) requireActivity().runOnUiThread(this::loadProducts);
             } catch (Exception e) { Log.e(TAG, e.getMessage()); }
         }).start();
     }
 
-    //  PATCH /api/list-items/{id} 
+    //  PATCH /api/item-lists{id} 
 
     private void patchChecked(ProductsAdapter.ProductItem item, boolean checked) {
         new Thread(() -> {
@@ -270,7 +270,7 @@ public class ProductsFragment extends Fragment {
                 JSONObject body = new JSONObject();
                 body.put("checked", checked);
                 Response r = ApiLinker.getInstance()
-                        .patchData("/api/list-items/" + item.listItemId, body, token);
+                        .patchData("/api/itemslists/" + item.listItemId, body, token);
                 if (!r.isSuccessful()) {
                     requireActivity().runOnUiThread(() -> {
                         item.checked = !checked;
