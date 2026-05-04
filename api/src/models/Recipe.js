@@ -20,6 +20,7 @@ module.exports = (sequelize) => {
         Recipe.belongsToMany(db.Product, {
             through: "RecipeProduct",
             foreignKey: "recipeId",
+            as: "products",
         });
     };
 
@@ -30,7 +31,7 @@ module.exports = (sequelize) => {
  * @swagger
  * components:
  *   schemas:
- *     Recipe:
+ *     RecipeMinimal:
  *       properties:
  *         id:
  *           type: integer
@@ -50,4 +51,12 @@ module.exports = (sequelize) => {
  *         updateAt:
  *           type: string
  *           example: 1970-01-01T00:00:00.000Z
+ *     RecipeFull:
+ *       allOf:
+ *         - $ref: '#/components/schemas/RecipeMinimal'
+ *         - type: object
+ *           properties:
+ *             recipeProduct:
+ *               type: object
+ *               $ref: '#/components/schemas/RecipeProductMinimal'
  */

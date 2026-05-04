@@ -26,7 +26,7 @@ const recipeController = require("../controllers/recipeController");
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Recipe'
+ *                 $ref: '#/components/schemas/RecipeMinimal'
  */
 router.get("/recipes", auth, recipeController.getAll);
 
@@ -50,7 +50,7 @@ router.get("/recipes", auth, recipeController.getAll);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Recipe'
+ *               $ref: '#/components/schemas/RecipeMinimal'
  *       403:
  *         description: Erreur d'appartenance
  *         content:
@@ -117,7 +117,7 @@ router.get("/recipes/:id", auth, recipeController.getOne);
  *               type: object
  *               properties:
  *                 recipe:
- *                   $ref: '#/components/schemas/Recipe'
+ *                   $ref: '#/components/schemas/RecipeMinimal'
  *                 products:
  *                     type: integer
  *                     example: 1
@@ -198,7 +198,7 @@ router.post("/recipes/", auth, recipeController.create);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Recipe'
+ *               $ref: '#/components/schemas/RecipeMinimal'
  *       400:
  *         description: Mauvaise requête
  *         content:
@@ -252,7 +252,7 @@ router.put("/recipes/:id", auth, recipeController.update);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Recipe'
+ *               $ref: '#/components/schemas/RecipeMinimal'
  *       403:
  *         description: Erreur d'appartenance
  *         content:

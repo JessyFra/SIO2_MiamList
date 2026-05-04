@@ -35,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
  *   schemas:
  *     ItemListMinimal:
  *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
  *         quantity:
  *           type: number
  *           example: 1.5
@@ -55,6 +58,9 @@ module.exports = (sequelize, DataTypes) => {
  *           example: 1
  *     ItemListFull:
  *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
  *         quantity:
  *           type: number
  *           example: 1.5
