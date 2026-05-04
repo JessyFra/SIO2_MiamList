@@ -54,7 +54,7 @@ exports.get = async (req, res) => {
 
 exports.getAll = async (req, res) => {
     try {
-        const products = await productService.getAll(req.user);
+        const products = await productService.getAll(req.user, req.query);
         res.status(200).json(products);
     } catch (error) {
         if (error.code === "PRODUCT_NOT_FOUND") {

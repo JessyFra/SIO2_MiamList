@@ -12,6 +12,13 @@ const productController = require("../controllers/productController");
  *     tags: [Produit]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: label
+ *         schema:
+ *           type: string
+ *         description: Le label à rechercher (recherche partielle)
+ *         example: Fromage
  *     responses:
  *       200:
  *         description: Tous les produits de l'Utilisateur récupérés avec succès
