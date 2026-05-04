@@ -60,6 +60,8 @@ router.get("/recipes/:id", auth, recipeController.getOne);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - name
  *             properties:
  *               name:
  *                 type: string
@@ -67,9 +69,37 @@ router.get("/recipes/:id", auth, recipeController.getOne);
  *               description:
  *                 type: string
  *                 example: "Gâteau d'anniversaire"
+ *               products:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     quantity:
+ *                       type: number
+ *                       example: 2.5
+ *                     checked:
+ *                       type: integer
+ *                       example: 1
+ *                     productId:
+ *                       type: integer
+ *                       example: 1
  *     responses:
  *       201:
  *         description: Recette créée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Recipe'
+ *       400:
+ *         description: Mauvaise requête
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Parameters 'name' is required
  */
 router.post("/recipes/", auth, recipeController.create);
 
