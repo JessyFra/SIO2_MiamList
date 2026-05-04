@@ -112,8 +112,6 @@ public class ProductsFragment extends Fragment {
         loadProducts();
     }
 
-    //  GET /api/lists/{id}/items
-
     private void loadProducts() {
         new Thread(() -> {
             try {
@@ -123,21 +121,32 @@ public class ProductsFragment extends Fragment {
                 requireActivity().runOnUiThread(() -> {
                     try {
                         JSONArray array = new JSONArray(body);
+
                         int oldSize = items.size();
                         items.clear();
-                        if (oldSize > 0)
+
+                        if (oldSize > 0) {
                             adapter.notifyItemRangeRemoved(0, oldSize);
+                        }
 
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject obj = array.getJSONObject(i);
                             JSONObject product = obj.getJSONObject("product");
-                            items.add(new ProductsAdapter.ProductItem(obj.optInt("id", 0), product.optInt("id", 0), product.getString("label"), (float) obj.optDouble("quantity", 1), product.optString("unit", ""), obj.optBoolean("checked", false)));
+                            items.add(new ProductsAdapter.ProductItem(
+                                obj.optInt("id", 0),
+                                product.optInt("id", 0),
+                                product.getString("label"),
+                                (float) obj.optDouble("quantity", 1),
+                                product.optString("unit", ""),
+                                obj.optBoolean("checked", false)
+                            ));
                         }
 
-                        if (!items.isEmpty())
+                        if (!items.isEmpty()) {
                             adapter.notifyItemRangeInserted(0, items.size());
-                        updateEmptyState();
+                        }
 
+                        updateEmptyState();
                     } catch (Exception e) {
                         Log.e(TAG, "Parsing : " + e.getMessage());
                     }
@@ -147,8 +156,6 @@ public class ProductsFragment extends Fragment {
             }
         }).start();
     }
-
-    //  Dialog Ajout / Modification
 
     private void showAddEditDialog(@Nullable ProductsAdapter.ProductItem editItem) {
         BottomSheetDialog dialog = new BottomSheetDialog(requireContext(), R.style.Theme_MiamList_BottomSheet);
@@ -187,15 +194,16 @@ public class ProductsFragment extends Fragment {
                 return;
             }
 
-            String qtyStr = editQty.getText() != null ? editQty.getText().toString().trim() : "";
-            String unitStr = editUnit.getText() != null ? editUnit.getText().toString().trim() : "";
+            String quantityStr = editQty.getText() != null ? editQty.getText().toString().trim() : "";
+            String unit = editUnit.getText() != null ? editUnit.getText().toString().trim() : "";
+            boolean checked = (editItem != null) && editItem.checked;
 
-            float qty = qtyStr.isEmpty() ? 1f : Float.parseFloat(qtyStr);
+            float quantity = quantityStr.isEmpty() ? 1f : Float.parseFloat(quantityStr);
 
             if (editItem == null) {
-                createProduct(label, unitStr);
+                createProduct(label, unit, quantity, checked);
             } else {
-                updateProduct(editItem, label, unitStr, qty);
+                updateProduct(editItem, label, unit, quantity);
             }
 
             dialog.dismiss();
@@ -209,20 +217,20 @@ public class ProductsFragment extends Fragment {
         dialog.show();
     }
 
-    private void createProduct(String label, String unit) {
+    private void createProduct(String label, String unit, float quantity, boolean checked) {
         new Thread(() -> {
             try {
                 JSONObject body = new JSONObject();
                 body.put("label", label);
+                body.put("unit", unit);
 
-                if (!unit.isEmpty()) {
-                    body.put("unit", unit);
-                }
-
-                Response response = ApiLinker.getInstance().postData("/products", body, token);
+                Response response = ApiLinker.getInstance().postData("/api/products", body, token);
 
                 if (response.isSuccessful()) {
-                    requireActivity().runOnUiThread(this::loadProducts);
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    int productId = jsonObject.getInt("id");
+
+                    addProduct(productId, quantity, checked);
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
@@ -239,11 +247,10 @@ public class ProductsFragment extends Fragment {
                 body.put("checked", checked);
                 body.put("productId", productId);
 
-                Response response = ApiLinker.getInstance().postData("/shopping-lists/" + listId + "/item-lists", body, token);
+                // 500
+                ApiLinker.getInstance().postData("/api/shopping-lists/" + listId + "/item-lists", body, token);
 
-                if (response.isSuccessful()) {
-                    requireActivity().runOnUiThread(this::loadProducts);
-                }
+                requireActivity().runOnUiThread(this::loadProducts);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
