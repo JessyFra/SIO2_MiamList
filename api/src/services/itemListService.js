@@ -80,7 +80,7 @@ exports.getAllByShoppingListId = async (id, user_p) => {
     return itemLists;
 };
 
-exports.patch = async (id, user_p) => {
+exports.patch = async (body, user_p) => {
     const user = await User.findByPk(user_p.id);
 
     const itemList = await ItemList.findByPk(body.id);
