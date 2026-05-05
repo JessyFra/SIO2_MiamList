@@ -13,6 +13,7 @@ import okhttp3.Response;
 public class ApiLinker {
 
     private final String BASE_URL = "https://miamlist.narsac.fr";
+    private final MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
     private static ApiLinker instance = null;
 
     public static ApiLinker getInstance() {
@@ -48,9 +49,7 @@ public class ApiLinker {
         try {
             OkHttpClient client = new OkHttpClient();
 
-            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-            RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
-
+            RequestBody body = RequestBody.create(jsonObject.toString(), mediaType);
             Request.Builder builder = new Request.Builder().url(BASE_URL + url).post(body);
 
             if (token != null) {
@@ -73,8 +72,7 @@ public class ApiLinker {
         try {
             OkHttpClient client = new OkHttpClient();
 
-            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-            RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+            RequestBody body = RequestBody.create(jsonObject.toString(), mediaType);
 
             Request request = new Request.Builder().url(BASE_URL + url)
                 .header("Authorization", "Bearer " + token)
@@ -97,8 +95,7 @@ public class ApiLinker {
         try {
             OkHttpClient client = new OkHttpClient();
 
-            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-            RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+            RequestBody body = RequestBody.create(jsonObject.toString(), mediaType);
 
             Request request = new Request.Builder()
                 .url(BASE_URL + url)
@@ -121,11 +118,13 @@ public class ApiLinker {
     public Response deleteData(String url, String token) {
         try {
             OkHttpClient client = new OkHttpClient();
+
             Request request = new Request.Builder()
                 .url(BASE_URL + url)
                 .header("Authorization", "Bearer " + token)
                 .delete()
                 .build();
+
             Response response = client.newCall(request).execute();
 
             if (!response.isSuccessful()) {
