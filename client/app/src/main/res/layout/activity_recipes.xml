@@ -162,7 +162,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
-        android:text="@string/new_list"
+        android:text="@string/new_recipe"
         android:textColor="#FFFFFF"
         android:fontFamily="sans-serif-light"
         android:textAllCaps="false"
