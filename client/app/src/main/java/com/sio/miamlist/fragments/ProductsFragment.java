@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.sio.miamlist.R;
 import com.sio.miamlist.adapters.ProductsAdapter;
@@ -43,7 +45,6 @@ public class ProductsFragment extends Fragment {
     private final List<ProductsAdapter.ProductItem> items = new ArrayList<>();
     private ProductsAdapter adapter;
 
-    private TextView tvListName;
     private TextView tvProductCount;
     private View layoutEmpty;
 
@@ -79,7 +80,7 @@ public class ProductsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        tvListName = view.findViewById(R.id.tvRecipeName);
+        TextView tvListName = view.findViewById(R.id.tvRecipeName);
         tvProductCount = view.findViewById(R.id.tvProductCount);
         layoutEmpty = view.findViewById(R.id.layoutEmpty);
 
@@ -168,8 +169,26 @@ public class ProductsFragment extends Fragment {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
+        MaterialAutoCompleteTextView editLabel = view.findViewById(R.id.editProductLabel);
+        ArrayAdapter<String> suggestionAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line);
+        editLabel.setAdapter(suggestionAdapter);
+
+        editLabel.setThreshold(1);
+
+        editLabel.addTextChangedListener(new android.text.TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            public void afterTextChanged(android.text.Editable s) {
+                String query = s.toString().trim();
+
+                if (!query.isEmpty()) {
+                    fetchSuggestions(query, suggestionAdapter);
+                }
+            }
+        });
+
         TextView tvTitle = view.findViewById(R.id.tvDialogTitle);
-        TextInputEditText editLabel = view.findViewById(R.id.editProductLabel);
         TextInputEditText editQty = view.findViewById(R.id.editProductQuantity);
         TextInputEditText editUnit = view.findViewById(R.id.editProductUnit);
         MaterialButton btnCancel = view.findViewById(R.id.btnCancelProduct);
@@ -197,12 +216,37 @@ public class ProductsFragment extends Fragment {
 
             String quantityStr = editQty.getText() != null ? editQty.getText().toString().trim() : "";
             String unit = editUnit.getText() != null ? editUnit.getText().toString().trim() : "";
-            boolean checked = (editItem != null) && editItem.checked;
 
             float quantity = quantityStr.isEmpty() ? 1f : Float.parseFloat(quantityStr);
 
             if (editItem == null) {
-                createProduct(label, unit, quantity, checked);
+                new Thread(() -> {
+                    try {
+                        Response response = ApiLinker.getInstance().getData("/api/products?label=" + label, token);
+
+                        if (response.isSuccessful()) {
+                            JSONArray array = new JSONArray(response.body().string());
+                            int productId = -1;
+
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject obj = array.getJSONObject(i);
+
+                                if (obj.getString("label").equalsIgnoreCase(label)) {
+                                    productId = obj.getInt("id");
+                                    break;
+                                }
+                            }
+
+                            if (productId != -1) {
+                                addProduct(productId, quantity, false);
+                            } else {
+                                createProduct(label, unit, quantity, false);
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }).start();
             } else {
                 updateProduct(editItem, label, unit, quantity);
             }
@@ -327,14 +371,40 @@ public class ProductsFragment extends Fragment {
         dialog.show();
     }
 
-    //  DELETE /api/item-lists{id}
-
     private void deleteProduct(ProductsAdapter.ProductItem item) {
         new Thread(() -> {
             try {
                 Response r = ApiLinker.getInstance().deleteData("/api/item-lists/" + item.listItemId, token);
                 if (r.isSuccessful())
                     requireActivity().runOnUiThread(this::loadProducts);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }).start();
+    }
+
+    private void fetchSuggestions(String query, ArrayAdapter<String> suggestionAdapter) {
+        new Thread(() -> {
+            try {
+                Response response = ApiLinker.getInstance().getData("/api/products?label=" + query, token);
+
+                if (response.isSuccessful()) {
+                    JSONArray array = new JSONArray(response.body().string());
+                    List<String> labels = new ArrayList<>();
+
+                    for (int i = 0; i < array.length(); i++) {
+                        labels.add(array.getJSONObject(i).getString("label"));
+                    }
+
+                    requireActivity().runOnUiThread(() -> {
+                        suggestionAdapter.clear();
+                        suggestionAdapter.addAll(labels);
+
+                        if (!labels.isEmpty()) {
+                            suggestionAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
