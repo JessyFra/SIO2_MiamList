@@ -8,7 +8,10 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import com.sio.miamlist.services.ApiLinker;
 import com.sio.miamlist.services.SessionManager;
+
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,16 +23,22 @@ public class MainActivity extends AppCompatActivity {
         controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         controller.hide(WindowInsetsCompat.Type.systemBars());
 
-        boolean isConnected = SessionManager.getToken(getApplicationContext()).isEmpty();
-        Intent intent;
+        new Thread(() -> {
+            String token = SessionManager.getToken(getApplicationContext());
 
-        if (isConnected) {
-            intent = new Intent(this, LoginActivity.class);
-        } else {
-            intent = new Intent(this, ShoppingListsActivity.class);
-        }
+            Response response = ApiLinker.getInstance().getData("/api/me", token);
+            Intent intent;
 
-        startActivity(intent);
-        finish();
+            if (response.isSuccessful()) {
+                intent = new Intent(this, ShoppingListsActivity.class);
+            } else {
+                intent = new Intent(this, LoginActivity.class);
+            }
+
+            runOnUiThread(() -> {
+                startActivity(intent);
+                finish();
+            });
+        }).start();
     }
 }

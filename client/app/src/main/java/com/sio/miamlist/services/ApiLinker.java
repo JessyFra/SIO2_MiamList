@@ -1,5 +1,7 @@
 package com.sio.miamlist.services;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
 import okhttp3.MediaType;
@@ -10,22 +12,33 @@ import okhttp3.Response;
 
 public class ApiLinker {
 
-    private final String BASE_URL = "http://10.0.2.2:3000"; // Variable
+    private final String BASE_URL = ""; // Variable
     private static ApiLinker instance = null;
 
     public static ApiLinker getInstance() {
         if (instance == null) {
             instance = new ApiLinker();
         }
+
         return instance;
     }
 
     public Response getData(String url, String token) {
         try {
             OkHttpClient client = new OkHttpClient();
-            Request.Builder builder = new Request.Builder().url(BASE_URL + url);
-            if (token != null) builder.header("Authorization", "Bearer " + token);
-            return client.newCall(builder.build()).execute();
+            Request.Builder builder = new Request.Builder().url(BASE_URL + url).get();
+
+            if (token != null) {
+                builder.header("Authorization", "Bearer " + token);
+            }
+
+            Response response = client.newCall(builder.build()).execute();
+
+            if (!response.isSuccessful()) {
+                Log.e("GET", response.message());
+            }
+
+            return response;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -34,13 +47,23 @@ public class ApiLinker {
     public Response postData(String url, JSONObject jsonObject, String token) {
         try {
             OkHttpClient client = new OkHttpClient();
+
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
-            Request.Builder builder = new Request.Builder()
-                    .url(BASE_URL + url)
-                    .post(body);
-            if (token != null) builder.header("Authorization", "Bearer " + token);
-            return client.newCall(builder.build()).execute();
+
+            Request.Builder builder = new Request.Builder().url(BASE_URL + url).post(body);
+
+            if (token != null) {
+                builder.header("Authorization", "Bearer " + token);
+            }
+
+            Response response = client.newCall(builder.build()).execute();
+
+            if (!response.isSuccessful()) {
+                Log.e("GET", response.message());
+            }
+
+            return response;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -49,14 +72,22 @@ public class ApiLinker {
     public Response putData(String url, JSONObject jsonObject, String token) {
         try {
             OkHttpClient client = new OkHttpClient();
+
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
-            Request request = new Request.Builder()
-                    .url(BASE_URL + url)
-                    .header("Authorization", "Bearer " + token)
-                    .put(body)
-                    .build();
-            return client.newCall(request).execute();
+
+            Request request = new Request.Builder().url(BASE_URL + url)
+                .header("Authorization", "Bearer " + token)
+                .put(body)
+                .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (!response.isSuccessful()) {
+                Log.e("PUT", response.message());
+            }
+
+            return response;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -65,14 +96,23 @@ public class ApiLinker {
     public Response patchData(String url, JSONObject jsonObject, String token) {
         try {
             OkHttpClient client = new OkHttpClient();
+
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
+
             Request request = new Request.Builder()
-                    .url(BASE_URL + url)
-                    .header("Authorization", "Bearer " + token)
-                    .patch(body)
-                    .build();
-            return client.newCall(request).execute();
+                .url(BASE_URL + url)
+                .header("Authorization", "Bearer " + token)
+                .patch(body)
+                .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (!response.isSuccessful()) {
+                Log.e("PATCH", response.message());
+            }
+
+            return response;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -82,11 +122,17 @@ public class ApiLinker {
         try {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url(BASE_URL + url)
-                    .header("Authorization", "Bearer " + token)
-                    .delete()
-                    .build();
-            return client.newCall(request).execute();
+                .url(BASE_URL + url)
+                .header("Authorization", "Bearer " + token)
+                .delete()
+                .build();
+            Response response = client.newCall(request).execute();
+
+            if (!response.isSuccessful()) {
+                Log.e("DELETE", response.message());
+            }
+
+            return response;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
