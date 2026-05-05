@@ -20,7 +20,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     public interface OnProductActionListener {
         void onEdit(RecipeItem item);
         void onDelete(RecipeItem item);
-        void onCheckedChanged(RecipeItem item, boolean checked);
     }
 
     public static class RecipeItem {
@@ -29,16 +28,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         public String  label;
         public float   quantity;
         public String  unit;
-        public boolean checked;
 
         public RecipeItem(int listItemId, int productId, String label,
-                          float quantity, String unit, boolean checked) {
+                          float quantity, String unit) {
             this.listItemId = listItemId;
             this.productId  = productId;
             this.label      = label;
             this.quantity   = quantity;
             this.unit       = unit;
-            this.checked    = checked;
         }
     }
 
@@ -54,7 +51,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_product, parent, false);
+                .inflate(R.layout.item_recipe_product, parent, false);
         return new ViewHolder(view);
     }
 
@@ -65,15 +62,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         holder.tvLabel.setText(item.label);
         bindQtyUnit(holder, item);
 
-        applyCheckedStyle(holder, item.checked);
-
-        holder.cbProduct.setOnCheckedChangeListener(null);
-        holder.cbProduct.setChecked(item.checked);
-        holder.cbProduct.setOnCheckedChangeListener((btn, isChecked) -> {
-            item.checked = isChecked;
-            applyCheckedStyle(holder, isChecked);
-            listener.onCheckedChanged(item, isChecked);
-        });
 
         holder.btnEdit.setOnClickListener(v -> listener.onEdit(item));
         holder.btnDelete.setOnClickListener(v -> listener.onDelete(item));
@@ -96,20 +84,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         }
     }
 
-    private void applyCheckedStyle(ViewHolder holder, boolean checked) {
-        if (checked) {
-            holder.tvLabel.setPaintFlags(
-                    holder.tvLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvLabel.setTextColor(0xFFBBBBBB);
-        } else {
-            holder.tvLabel.setPaintFlags(
-                    holder.tvLabel.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvLabel.setTextColor(0xFF1A1A1A);
-        }
-    }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        MaterialCheckBox cbProduct;
         TextView         tvLabel;
         TextView         tvQtyUnit;
         ImageButton      btnEdit;
@@ -117,7 +92,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         ViewHolder(View v) {
             super(v);
-            cbProduct = v.findViewById(R.id.cbProduct);
             tvLabel   = v.findViewById(R.id.tvProductLabel);
             tvQtyUnit = v.findViewById(R.id.tvProductQtyUnit);
             btnEdit   = v.findViewById(R.id.btnEditProduct);
