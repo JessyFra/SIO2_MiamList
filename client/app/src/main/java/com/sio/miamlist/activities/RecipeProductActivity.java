@@ -5,9 +5,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sio.miamlist.R;
-import com.sio.miamlist.fragments.ProductsFragment;
+import com.sio.miamlist.fragments.RecipeProductsFragment;
 
-public class ListItemActivity extends AppCompatActivity {
+public class RecipeProductActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class ListItemActivity extends AppCompatActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer,
-                            ProductsFragment.newInstance(listId, listName))
+                            RecipeProductsFragment.newInstance(listId, listName))
                     .commit();
         }
     }

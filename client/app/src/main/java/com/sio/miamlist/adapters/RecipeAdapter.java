@@ -4,26 +4,26 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.sio.miamlist.R;
 
 import java.util.List;
 
-public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
+public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
     public interface OnProductActionListener {
-        void onEdit(ProductItem item);
-        void onDelete(ProductItem item);
-        void onCheckedChanged(ProductItem item, boolean checked);
+        void onEdit(RecipeItem item);
+        void onDelete(RecipeItem item);
+        void onCheckedChanged(RecipeItem item, boolean checked);
     }
 
-    public static class ProductItem {
+    public static class RecipeItem {
         public int     listItemId;
         public int     productId;
         public String  label;
@@ -31,7 +31,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         public String  unit;
         public boolean checked;
 
-        public ProductItem(int listItemId, int productId, String label,
+        public RecipeItem(int listItemId, int productId, String label,
                            float quantity, String unit, boolean checked) {
             this.listItemId = listItemId;
             this.productId  = productId;
@@ -42,10 +42,10 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         }
     }
 
-    private final List<ProductItem>       items;
+    private final List<RecipeItem>       items;
     private final OnProductActionListener listener;
 
-    public ProductsAdapter(List<ProductItem> items, OnProductActionListener listener) {
+    public RecipeAdapter(List<RecipeItem> items, OnProductActionListener listener) {
         this.items    = items;
         this.listener = listener;
     }
@@ -60,7 +60,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ProductItem item = items.get(position);
+        RecipeItem item = items.get(position);
 
         // Texte
         holder.tvLabel.setText(item.label);
@@ -85,7 +85,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     @Override
     public int getItemCount() { return items.size(); }
 
-    private void bindQtyUnit(ViewHolder holder, ProductItem item) {
+    private void bindQtyUnit(ViewHolder holder, RecipeItem item) {
         if (item.quantity > 0) {
             String qty = item.quantity == (int) item.quantity
                     ? String.valueOf((int) item.quantity)

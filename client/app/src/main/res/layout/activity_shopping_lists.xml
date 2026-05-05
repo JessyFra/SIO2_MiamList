@@ -41,17 +41,46 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/my_lists"
-                    android:textSize="28sp"
                     android:fontFamily="sans-serif-thin"
+                    android:letterSpacing="0.01"
+                    android:text="@string/my_lists"
+                    android:textAlignment="center"
                     android:textColor="#1A1A1A"
-                    android:letterSpacing="0.01" />
+                    android:textFontWeight="300"
+                    android:textSize="28sp" />
 
                 <!-- Badge nombre de listes -->
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:fontFamily="sans-serif-thin"
+                    android:letterSpacing="0.01"
+                    android:text="|"
+                    android:textAlignment="center"
+                    android:textColor="#CE7E4D"
+                    android:textFontWeight="300"
+                    android:textSize="36sp" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-thin"
+                    android:letterSpacing="0.01"
+                    android:onClick="loadRecipeList"
+                    android:text="@string/my_recipes"
+                    android:textAlignment="center"
+                    android:textColor="#1A1A1A"
+                    android:textSize="28sp" />
+
                 <TextView
                     android:id="@+id/tvListCount"
                     android:layout_width="40dp"

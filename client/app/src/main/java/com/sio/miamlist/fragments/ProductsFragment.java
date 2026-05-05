@@ -68,6 +68,7 @@ public class ProductsFragment extends Fragment {
         token = SessionManager.getToken(getContext());
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,14 +79,14 @@ public class ProductsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        tvListName = view.findViewById(R.id.tvListName);
+        tvListName = view.findViewById(R.id.tvRecipeName);
         tvProductCount = view.findViewById(R.id.tvProductCount);
         layoutEmpty = view.findViewById(R.id.layoutEmpty);
 
         tvListName.setText(listName);
 
         //  RecyclerView
-        RecyclerView recycler = view.findViewById(R.id.recyclerProducts);
+        RecyclerView recycler = view.findViewById(R.id.recyclerRecipes);
         recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new ProductsAdapter(items, new ProductsAdapter.OnProductActionListener() {
             @Override

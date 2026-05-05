@@ -197,4 +197,10 @@ public class ShoppingListsActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+    public void loadRecipeList(View view) {
+        Intent intent = new Intent(ShoppingListsActivity.this, RecipeActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+    }
 }
