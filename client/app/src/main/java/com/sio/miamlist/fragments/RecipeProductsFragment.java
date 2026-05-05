@@ -72,7 +72,7 @@ public class RecipeProductsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_products, container, false);
+        return inflater.inflate(R.layout.fragment_recipe_products, container, false);
     }
 
     @Override
@@ -97,12 +97,6 @@ public class RecipeProductsFragment extends Fragment {
             @Override
             public void onDelete(RecipeAdapter.RecipeItem item) {
                 showDeleteConfirmDialog(item);
-            }
-
-            @Override
-            public void onCheckedChanged(RecipeAdapter.RecipeItem item, boolean checked) {
-                // Les produits de recette n'ont pas de champ "checked" dans l'API
-                // On met uniquement à jour l'état visuel (déjà géré dans l'adapter)
             }
         });
         recycler.setAdapter(adapter);
@@ -137,8 +131,7 @@ public class RecipeProductsFragment extends Fragment {
                                     product.optInt("id", 0),
                                     product.getString("label"),
                                     (float) obj.optDouble("quantity", 1),
-                                    product.optString("unit", ""),
-                                    false
+                                    product.optString("unit", "")
                             ));
                         }
 
