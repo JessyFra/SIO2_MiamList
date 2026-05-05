@@ -12,7 +12,7 @@ import okhttp3.Response;
 
 public class ApiLinker {
 
-    private final String BASE_URL = ""; // Variable
+    private final String BASE_URL = "https://miamlist.narsac.fr";
     private static ApiLinker instance = null;
 
     public static ApiLinker getInstance() {
