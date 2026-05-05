@@ -59,7 +59,7 @@ public class ApiLinker {
             Response response = client.newCall(builder.build()).execute();
 
             if (!response.isSuccessful()) {
-                Log.e("GET", response.message());
+                Log.e("POST", response.message());
             }
 
             return response;
