@@ -77,14 +77,21 @@
         android:layout_marginBottom="16dp"
         style="@style/Widget.MiamList.TextInputLayout">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editProductLabel"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MiamList.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences"
-            android:imeOptions="actionNext"
-            android:fontFamily="sans-serif-light"
-            android:textSize="15sp" />
+            android:hint="Nom du produit">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/editProductLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:padding="12dp"
+                android:dropDownSelector="@color/accent_light"
+                android:popupBackground="@color/background" />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </com.google.android.material.textfield.TextInputLayout>
 
