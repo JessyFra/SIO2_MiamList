@@ -138,14 +138,15 @@ public class RecipeActivity extends AppCompatActivity {
 
     private void showCreateListDialog() {
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.Theme_MiamList_BottomSheet);
-        View view = getLayoutInflater().inflate(R.layout.dialog_create_list, findViewById(android.R.id.content), false);
+        View view = getLayoutInflater().inflate(R.layout.dialog_create_recipe, findViewById(android.R.id.content), false);
         dialog.setContentView(view);
 
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        TextInputEditText editName = view.findViewById(R.id.editListName);
+        TextInputEditText editName = view.findViewById(R.id.editRecipeName);
+        TextInputEditText editDescription = view.findViewById(R.id.editRecipeDescription);
         MaterialButton btnCreate  = view.findViewById(R.id.btnCreate);
         MaterialButton btnCancel  = view.findViewById(R.id.btnCancel);
 
@@ -155,8 +156,14 @@ public class RecipeActivity extends AppCompatActivity {
             String name = editName.getText() != null
                     ? editName.getText().toString().trim() : "";
             if (!name.isEmpty()) {
-                createList(name);
-                dialog.dismiss();
+                String description = editDescription.getText() != null
+                        ? editDescription.getText().toString().trim() : "";
+                if (!description.isEmpty()) {
+                    createList(name, description);
+                    dialog.dismiss();
+                } else {
+                    editName.setError("Veuillez saisir une description");
+                }
             } else {
                 editName.setError("Veuillez saisir un nom");
             }
@@ -170,13 +177,25 @@ public class RecipeActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void createList(String name) {
+    private void createList(String name, String description) {
         new Thread(() -> {
             try {
                 JSONObject body = new JSONObject();
                 body.put("name", name);
+                body.put("description", description);
                 Response response = ApiLinker.getInstance().postData("/api/recipes", body, token);
-                if (response.isSuccessful()) loadLists();
+                if (response.isSuccessful()) {
+                    Intent intent = new Intent(RecipeActivity.this, RecipeProductActivity.class);
+                    String resBody = response.body().string();
+                    JSONObject json = new JSONObject(resBody);
+                    JSONObject recipe = json.getJSONObject("recipe");
+                    int id = recipe.getInt("id");
+
+
+                    intent.putExtra("id", id);
+                    intent.putExtra("name", name);
+                    startActivity(intent);
+                }
             } catch (Exception e) {
                 Log.e("SHOPPINGLIST", e.toString());
             }

@@ -146,7 +146,7 @@ public class ShoppingListsActivity extends AppCompatActivity {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        TextInputEditText editName = view.findViewById(R.id.editListName);
+        TextInputEditText editName = view.findViewById(R.id.editRecipeName);
         MaterialButton btnCreate  = view.findViewById(R.id.btnCreate);
         MaterialButton btnCancel  = view.findViewById(R.id.btnCancel);
 

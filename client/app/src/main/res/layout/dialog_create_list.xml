@@ -72,7 +72,7 @@
 
     <!-- Champ de saisie -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilListName"
+        android:id="@+id/tilRecipeName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/example_shopping"
@@ -82,7 +82,7 @@
         app:boxStrokeColor="@color/outline">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editListName"
+            android:id="@+id/editRecipeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapSentences"
