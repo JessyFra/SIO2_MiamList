@@ -32,7 +32,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         public boolean checked;
 
         public RecipeItem(int listItemId, int productId, String label,
-                           float quantity, String unit, boolean checked) {
+                          float quantity, String unit, boolean checked) {
             this.listItemId = listItemId;
             this.productId  = productId;
             this.label      = label;
@@ -42,7 +42,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         }
     }
 
-    private final List<RecipeItem>       items;
+    private final List<RecipeItem>        items;
     private final OnProductActionListener listener;
 
     public RecipeAdapter(List<RecipeItem> items, OnProductActionListener listener) {
@@ -62,14 +62,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RecipeItem item = items.get(position);
 
-        // Texte
         holder.tvLabel.setText(item.label);
         bindQtyUnit(holder, item);
 
-        // Style barré si coché
         applyCheckedStyle(holder, item.checked);
 
-        // Checkbox — éviter le listener parasite au rebind
         holder.cbProduct.setOnCheckedChangeListener(null);
         holder.cbProduct.setChecked(item.checked);
         holder.cbProduct.setOnCheckedChangeListener((btn, isChecked) -> {
@@ -113,18 +110,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         MaterialCheckBox cbProduct;
-        TextView    tvLabel;
-        TextView    tvQtyUnit;
-        ImageButton btnEdit;
-        ImageButton btnDelete;
+        TextView         tvLabel;
+        TextView         tvQtyUnit;
+        ImageButton      btnEdit;
+        ImageButton      btnDelete;
 
         ViewHolder(View v) {
             super(v);
-            cbProduct  = v.findViewById(R.id.cbProduct);
-            tvLabel    = v.findViewById(R.id.tvProductLabel);
-            tvQtyUnit  = v.findViewById(R.id.tvProductQtyUnit);
-            btnEdit    = v.findViewById(R.id.btnEditProduct);
-            btnDelete  = v.findViewById(R.id.btnDeleteProduct);
+            cbProduct = v.findViewById(R.id.cbProduct);
+            tvLabel   = v.findViewById(R.id.tvProductLabel);
+            tvQtyUnit = v.findViewById(R.id.tvProductQtyUnit);
+            btnEdit   = v.findViewById(R.id.btnEditProduct);
+            btnDelete = v.findViewById(R.id.btnDeleteProduct);
         }
     }
 }
