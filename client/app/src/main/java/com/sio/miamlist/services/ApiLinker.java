@@ -12,7 +12,7 @@ import okhttp3.Response;
 
 public class ApiLinker {
 
-    private final String BASE_URL = "https://miamlist.narsac.fr";
+    private final String BASE_URL = "";
     private final MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
     private static ApiLinker instance = null;
 
