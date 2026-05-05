@@ -5,13 +5,27 @@ exports.createByShoppingListId = async (req, res) => {
         req.body.shoppingListId = req.params.id;
         if (
             req.body.quantity === undefined ||
-            req.body.quantity === undefined ||
-            !req.body.productId
+            req.body.quantity === undefined
         ) {
             return res.status(400).json({
-                error: "Parameters 'quantity', 'checked' and 'productId' are required",
+                error: "Parameters 'quantity' and 'checked' are required",
             });
         }
+        if (
+            req.body.productId !== undefined &&
+            req.body.recipeId !== undefined
+        ) {
+            return res.status(400).json({
+                error: "At least one of 'productId' or 'recipeId' is required",
+            });
+        }
+
+        if (req.body.productId && req.body.recipeId) {
+            return res.status(400).json({
+                error: "'productId' and 'recipeId' cannot be present at the same time",
+            });
+        }
+
         if (req.body.quantity === 0) {
             return res.status(400).json({
                 error: "Quantity cannot be < 0",
@@ -23,7 +37,10 @@ exports.createByShoppingListId = async (req, res) => {
         );
         res.status(itemList.code).json(itemList.data);
     } catch (error) {
-        if (error.code === "RECIPE_NOT_FOUND") {
+        if (
+            error.code === "RECIPE_NOT_FOUND" ||
+            error.code === "SHOPPING_LIST_NOT_FOUND"
+        ) {
             return res.status(404).json({ error: error.message });
         } else if (error.code === "FORBIDDEN") {
             return res.status(403).json({ error: error.message });

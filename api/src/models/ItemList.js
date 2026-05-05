@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
  *           example: 1.5
  *         checked:
  *           type: boolean
- *           example: 0
+ *           example: false
  *         createdAt:
  *           type: date-time
  *           example: 1970-01-01T00:00:00.000Z
