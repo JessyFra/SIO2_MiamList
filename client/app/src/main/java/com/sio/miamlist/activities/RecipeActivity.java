@@ -1,7 +1,6 @@
 package com.sio.miamlist.activities;
 
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +27,7 @@ import java.util.List;
 
 import okhttp3.Response;
 
-public class ShoppingListsActivity extends AppCompatActivity {
+public class RecipeActivity extends AppCompatActivity {
 
     private ShoppingListsAdapter adapter;
     private final List<ShoppingListsAdapter.ListItem> listsItem = new ArrayList<>();
@@ -39,19 +38,19 @@ public class ShoppingListsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shopping_lists);
+        setContentView(R.layout.activity_recipes);
 
         token = SessionManager.getToken(getApplicationContext());
 
         tvListCount = findViewById(R.id.tvListCount);
         layoutEmpty = findViewById(R.id.layoutEmpty);
 
-        RecyclerView recycler = findViewById(R.id.recyclerShoppingLists);
+        RecyclerView recycler = findViewById(R.id.recyclerRecipes);
         recycler.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ShoppingListsAdapter(listsItem, new ShoppingListsAdapter.OnListActionListener() {
             @Override
             public void onListClick(int id, String name) {
-                Intent intent = new Intent(ShoppingListsActivity.this, ListItemActivity.class);
+                Intent intent = new Intent(RecipeActivity.this, RecipeProductActivity.class);
                 intent.putExtra("id", id);
                 intent.putExtra("name", name);
                 startActivity(intent);
@@ -96,7 +95,7 @@ public class ShoppingListsActivity extends AppCompatActivity {
     private void loadLists() {
         new Thread(() -> {
             try {
-                Response response = ApiLinker.getInstance().getData("/api/shopping-lists", token);
+                Response response = ApiLinker.getInstance().getData("/api/recipes", token);
                 String body = response.body().string();
                 runOnUiThread(() -> {
                     try {
@@ -176,7 +175,7 @@ public class ShoppingListsActivity extends AppCompatActivity {
             try {
                 JSONObject body = new JSONObject();
                 body.put("name", name);
-                Response response = ApiLinker.getInstance().postData("/api/shopping-lists", body, token);
+                Response response = ApiLinker.getInstance().postData("/api/recipes", body, token);
                 if (response.isSuccessful()) loadLists();
             } catch (Exception e) {
                 Log.e("SHOPPINGLIST", e.toString());
@@ -187,7 +186,7 @@ public class ShoppingListsActivity extends AppCompatActivity {
     private void deleteList(int id) {
         new Thread(() -> {
             try {
-                Response response = ApiLinker.getInstance().deleteData("/api/shopping-lists/" + id, token);
+                Response response = ApiLinker.getInstance().deleteData("/api/recipes/" + id, token);
 
                 if (response.isSuccessful()) {
                     loadLists();
@@ -198,8 +197,8 @@ public class ShoppingListsActivity extends AppCompatActivity {
         }).start();
     }
 
-    public void loadRecipeList(View view) {
-        Intent intent = new Intent(ShoppingListsActivity.this, RecipeActivity.class);
+    public void loadShoppingList(View view) {
+        Intent intent = new Intent(RecipeActivity.this, ShoppingListsActivity.class);
         startActivity(intent);
         overridePendingTransition(0, 0);
     }

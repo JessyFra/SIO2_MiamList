@@ -53,7 +53,7 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
         ImageButton btnDelete;
         ViewHolder(View v) {
             super(v);
-            tvName    = v.findViewById(R.id.tvListName);
+            tvName    = v.findViewById(R.id.tvRecipeName);
             btnDelete = v.findViewById(R.id.btnDeleteList);
         }
     }

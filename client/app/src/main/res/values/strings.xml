@@ -8,7 +8,8 @@
     <string name="great_to_see_you_again">Ravi de vous revoir</string>
     <string name="new_list">Nouvelle liste</string>
     <string name="no_list_yet">Pas encore de liste</string>
-    <string name="my_lists">Mes listes</string>
+    <string name="my_lists">Listes</string>
+    <string name="my_recipes">Recettes</string>
     <string name="give_your_list_a_name">Donnez un nom à votre liste</string>
     <string name="example_shopping">Exemple: Repas crêpes</string>
     <string name="cancel">Annuler</string>

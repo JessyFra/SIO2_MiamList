@@ -48,10 +48,10 @@
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-thin"
                     android:letterSpacing="0.01"
+                    android:onClick="loadShoppingList"
                     android:text="@string/my_lists"
                     android:textAlignment="center"
                     android:textColor="#1A1A1A"
-                    android:textFontWeight="300"
                     android:textSize="28sp" />
 
                 <!-- Badge nombre de listes -->
@@ -75,10 +75,10 @@
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-thin"
                     android:letterSpacing="0.01"
-                    android:onClick="loadRecipeList"
                     android:text="@string/my_recipes"
                     android:textAlignment="center"
                     android:textColor="#1A1A1A"
+                    android:textFontWeight="300"
                     android:textSize="28sp" />
 
                 <TextView
@@ -104,7 +104,7 @@
 
     <!-- ══ RecyclerView ══ -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerShoppingLists"
+        android:id="@+id/recyclerRecipes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingStart="20dp"
