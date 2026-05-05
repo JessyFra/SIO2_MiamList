@@ -40,10 +40,8 @@ public class ApiLinker {
 
             return response;
         } catch (Exception e) {
-            Log.e("GET", e.getMessage());
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     public Response postData(String url, JSONObject jsonObject, String token) {
@@ -67,10 +65,8 @@ public class ApiLinker {
 
             return response;
         } catch (Exception e) {
-            Log.e("POST", e.getMessage());
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     public Response putData(String url, JSONObject jsonObject, String token) {
@@ -93,10 +89,8 @@ public class ApiLinker {
 
             return response;
         } catch (Exception e) {
-            Log.e("PUT", e.getMessage());
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     public Response patchData(String url, JSONObject jsonObject, String token) {
@@ -120,10 +114,8 @@ public class ApiLinker {
 
             return response;
         } catch (Exception e) {
-            Log.e("POST", e.getMessage());
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     public Response deleteData(String url, String token) {
@@ -142,9 +134,7 @@ public class ApiLinker {
 
             return response;
         } catch (Exception e) {
-            Log.e("POST", e.getMessage());
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 }
