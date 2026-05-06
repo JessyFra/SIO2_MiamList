@@ -111,7 +111,7 @@
             android:textColor="#AAAAAA" />
     </LinearLayout>
 
-    <!-- ══ FABs groupés en bas à droite ══ -->
+    <!-- ══ Boutons groupés en bas à droite ══ -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -119,32 +119,41 @@
         android:orientation="vertical"
         android:gravity="end"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="48dp">
+        android:layout_marginBottom="24dp">
 
-        <!-- FAB secondaire : ajouter depuis une recette -->
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/fabAddFromRecipe"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="60dp"
             android:layout_marginBottom="10dp"
             android:text="Depuis une recette"
-            app:icon="@android:drawable/ic_menu_agenda"
-            app:backgroundTint="#F5E6D8"
             android:textColor="#CE7E4D"
-            app:iconTint="#CE7E4D"
-            app:pressedTranslationZ="2dp" />
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="0.04"
+            app:backgroundTint="#F5E6D8"
+            app:cornerRadius="10dp"
+            app:elevation="0dp"
+            app:icon="@android:drawable/ic_menu_agenda"
+            app:iconTint="#CE7E4D" />
 
-        <!-- FAB principal : ajouter un produit -->
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/fabAddProduct"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="60dp"
             android:text="Ajouter un produit"
             android:textColor="#FFFFFF"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="0.04"
             app:backgroundTint="#CE7E4D"
+            app:cornerRadius="10dp"
+            app:elevation="0dp"
             app:icon="@android:drawable/ic_input_add"
             app:iconTint="#FFFFFF"
-            app:pressedTranslationZ="2dp" />
+            app:rippleColor="#33FFFFFF" />
 
     </LinearLayout>
 

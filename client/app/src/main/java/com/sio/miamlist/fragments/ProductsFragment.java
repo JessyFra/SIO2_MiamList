@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.sio.miamlist.R;
@@ -133,13 +132,13 @@ public class ProductsFragment extends Fragment {
         recycler.setAdapter(adapter);
 
         // FAB ajouter un produit
-        ExtendedFloatingActionButton fabProduct = view.findViewById(R.id.fabAddProduct);
-        fabProduct.setOnClickListener(v -> showAddEditDialog(null));
+        MaterialButton fabAddProduct = view.findViewById(R.id.fabAddProduct);
+        fabAddProduct.setOnClickListener(v -> showAddEditDialog(null));
 
         // FAB ajouter depuis une recette
-        ExtendedFloatingActionButton fabRecipe = view.findViewById(R.id.fabAddFromRecipe);
-        if (fabRecipe != null) {
-            fabRecipe.setOnClickListener(v -> showAddFromRecipeDialog());
+        MaterialButton fabAddFromRecipe = view.findViewById(R.id.fabAddFromRecipe);
+        if (fabAddFromRecipe != null) {
+            fabAddFromRecipe.setOnClickListener(v -> showAddFromRecipeDialog());
         }
 
         loadProducts();
