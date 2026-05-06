@@ -12,6 +12,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.sio.miamlist.R;
 import com.sio.miamlist.services.ApiLinker;
 import com.sio.miamlist.services.SessionManager;
+import com.sio.miamlist.utils.ConnectionManager;
 
 import org.json.JSONObject;
 
@@ -72,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
             } catch (Exception e) {
-                runOnUiThread(() -> showError("Impossible de joindre le serveur"));
+                startActivity(new Intent(getApplicationContext(), OfflineErrorActivity.class));
             }
         }).start();
     }

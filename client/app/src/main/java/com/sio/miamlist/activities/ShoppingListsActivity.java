@@ -135,11 +135,11 @@ public class ShoppingListsActivity extends BaseActivity {
 
                         updateEmptyState();
                     } catch (Exception e) {
-                        Log.e("SHOPPINGLIST", e.toString());
+                        startActivity(new Intent(getApplicationContext(), OfflineErrorActivity.class));
                     }
                 });
             } catch (Exception e) {
-                Log.e("SHOPPINGLIST", e.toString());
+                startActivity(new Intent(getApplicationContext(), OfflineErrorActivity.class));
             }
         }).start();
     }
@@ -190,7 +190,7 @@ public class ShoppingListsActivity extends BaseActivity {
                 if (!checkAuth(response.code())) return;
                 if (response.isSuccessful()) loadLists();
             } catch (Exception e) {
-                Log.e("SHOPPINGLIST", e.toString());
+                startActivity(new Intent(getApplicationContext(), OfflineErrorActivity.class));
             }
         }).start();
     }
@@ -202,7 +202,7 @@ public class ShoppingListsActivity extends BaseActivity {
                 if (!checkAuth(response.code())) return;
                 if (response.isSuccessful()) loadLists();
             } catch (Exception e) {
-                Log.e("SHOPPINGLIST", e.toString());
+                startActivity(new Intent(getApplicationContext(), OfflineErrorActivity.class));
             }
         }).start();
     }

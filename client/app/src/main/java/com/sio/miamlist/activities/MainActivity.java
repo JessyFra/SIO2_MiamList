@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.sio.miamlist.services.ApiLinker;
 import com.sio.miamlist.services.SessionManager;
+import com.sio.miamlist.utils.ConnectionManager;
 
 import okhttp3.Response;
 
@@ -24,15 +25,31 @@ public class MainActivity extends AppCompatActivity {
         controller.hide(WindowInsetsCompat.Type.systemBars());
 
         new Thread(() -> {
-            String token = SessionManager.getToken(getApplicationContext());
+            boolean hasTransport = ConnectionManager.checkTransport(getApplicationContext());
 
-            Response response = ApiLinker.getInstance().getData("/api/me", token);
+            if (!hasTransport) {
+                startActivity(new Intent(getApplicationContext(), OfflineErrorActivity.class));
+                finish();
+                return;
+            }
+
+            String token = SessionManager.getToken(getApplicationContext());
             Intent intent;
 
-            if (response.isSuccessful()) {
-                intent = new Intent(this, ShoppingListsActivity.class);
-            } else {
-                intent = new Intent(this, LoginActivity.class);
+            try {
+                Response response = ApiLinker.getInstance().getData("/api/me", token);
+
+                if (response.isSuccessful()) {
+                    intent = new Intent(getApplicationContext(), ShoppingListsActivity.class);
+                } else {
+                    intent = new Intent(getApplicationContext(), LoginActivity.class);
+                }
+
+                response.close();
+            } catch (Exception e) {
+                startActivity(new Intent(getApplicationContext(), OfflineErrorActivity.class));
+                finish();
+                return;
             }
 
             runOnUiThread(() -> {

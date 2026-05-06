@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -28,6 +30,7 @@
         <activity android:name=".activities.ListItemActivity" />
         <activity android:name=".activities.RecipeActivity" />
         <activity android:name=".activities.RecipeProductActivity" />
+        <activity android:name=".activities.OfflineErrorActivity" />
     </application>
 
 </manifest>

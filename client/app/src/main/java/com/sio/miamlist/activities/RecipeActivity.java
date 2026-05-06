@@ -139,7 +139,7 @@ public class RecipeActivity extends BaseActivity {
                     }
                 });
             } catch (Exception e) {
-                Log.e("RECIPE", e.toString());
+                startActivity(new Intent(getApplicationContext(), OfflineErrorActivity.class));
             }
         }).start();
     }
@@ -189,7 +189,7 @@ public class RecipeActivity extends BaseActivity {
                 if (!checkAuth(response.code())) return;
                 if (response.isSuccessful()) loadRecipes();
             } catch (Exception e) {
-                Log.e("RECIPE", e.toString());
+                startActivity(new Intent(getApplicationContext(), OfflineErrorActivity.class));
             }
         }).start();
     }
@@ -201,7 +201,7 @@ public class RecipeActivity extends BaseActivity {
                 if (!checkAuth(response.code())) return;
                 if (response.isSuccessful()) loadRecipes();
             } catch (Exception e) {
-                Log.e("RECIPE", e.toString());
+                startActivity(new Intent(getApplicationContext(), OfflineErrorActivity.class));
             }
         }).start();
     }
