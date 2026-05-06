@@ -208,7 +208,7 @@ public class ProductsFragment extends Fragment {
         MaterialButton btnSave                 = view.findViewById(R.id.btnSaveProduct);
         MaterialButton btnCancel               = view.findViewById(R.id.btnCancelProduct);
 
-        ArrayAdapter<String> suggestionAdapter = new SubstringArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter<String> suggestionAdapter = new SubstringArrayAdapter(requireContext(), R.layout.item_dropdown);
         editLabel.setAdapter(suggestionAdapter);
         editLabel.setThreshold(1);
 
