@@ -75,7 +75,7 @@ async function seed() {
     await salade.addProducts([tomates], { through: { quantity: 1 } });
     console.log("Recettes insérées");
 
-    //  Listes de courses ─
+    //  Listes de courses
     const listeSemaine = await ShoppingList.create({
         name: "Courses de la semaine",
         userId: admin.id,

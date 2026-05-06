@@ -131,7 +131,7 @@ public class RecipeProductsFragment extends Fragment {
         loadProducts();
     }
 
-    // ─── Chargement ──────────────────────────────────────────────────────────
+    //  Chargement 
 
     private void loadProducts() {
         new Thread(() -> {
@@ -176,7 +176,7 @@ public class RecipeProductsFragment extends Fragment {
         }).start();
     }
 
-    // ─── Dialogue ajout/édition ───────────────────────────────────────────────
+    //  Dialogue ajout/édition 
 
     private void showAddEditDialog(@Nullable RecipeAdapter.RecipeItem editItem) {
         BottomSheetDialog dialog = new BottomSheetDialog(requireContext(), R.style.Theme_MiamList_BottomSheet);
@@ -293,7 +293,7 @@ public class RecipeProductsFragment extends Fragment {
         }).start();
     }
 
-    // ─── Suppression ─────────────────────────────────────────────────────────
+    //  Suppression 
 
     private void showDeleteConfirmDialog(RecipeAdapter.RecipeItem item) {
         BottomSheetDialog dialog = new BottomSheetDialog(requireContext(), R.style.Theme_MiamList_BottomSheet);
@@ -327,7 +327,7 @@ public class RecipeProductsFragment extends Fragment {
         }).start();
     }
 
-    // ─── Utilitaires ─────────────────────────────────────────────────────────
+    //  Utilitaires 
 
     private void updateEmptyState() {
         tvProductCount.setText(String.valueOf(items.size()));

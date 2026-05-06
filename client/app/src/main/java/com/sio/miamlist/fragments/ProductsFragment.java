@@ -145,7 +145,7 @@ public class ProductsFragment extends Fragment {
         loadProducts();
     }
 
-    // ─── Chargement ──────────────────────────────────────────────────────────
+    //  Chargement 
 
     private void loadProducts() {
         new Thread(() -> {
@@ -191,7 +191,7 @@ public class ProductsFragment extends Fragment {
         }).start();
     }
 
-    // ─── Dialogue ajout/édition produit ──────────────────────────────────────
+    //  Dialogue ajout/édition produit 
 
     private void showAddEditDialog(@Nullable ProductsAdapter.ProductItem editItem) {
         BottomSheetDialog dialog = new BottomSheetDialog(requireContext(), R.style.Theme_MiamList_BottomSheet);
@@ -333,7 +333,7 @@ public class ProductsFragment extends Fragment {
         }).start();
     }
 
-    // ─── Dialogue ajout depuis recette ───────────────────────────────────────
+    //  Dialogue ajout depuis recette 
 
     /** Bottom sheet de sélection multiple de recettes à ajouter à la liste. */
     private void showAddFromRecipeDialog() {
@@ -418,7 +418,7 @@ public class ProductsFragment extends Fragment {
         }).start();
     }
 
-    // ─── Suppression ─────────────────────────────────────────────────────────
+    //  Suppression 
 
     private void showDeleteConfirmDialog(ProductsAdapter.ProductItem item) {
         BottomSheetDialog dialog = new BottomSheetDialog(requireContext(), R.style.Theme_MiamList_BottomSheet);
@@ -452,7 +452,7 @@ public class ProductsFragment extends Fragment {
         }).start();
     }
 
-    // ─── Autocomplétion ──────────────────────────────────────────────────────
+    //  Autocomplétion 
 
     private void fetchSuggestions(String query, ArrayAdapter<String> suggestionAdapter) {
         new Thread(() -> {
@@ -477,7 +477,7 @@ public class ProductsFragment extends Fragment {
         }).start();
     }
 
-    // ─── Utilitaires ─────────────────────────────────────────────────────────
+    //  Utilitaires 
 
     private void updateEmptyState() {
         tvProductCount.setText(String.valueOf(items.size()));
