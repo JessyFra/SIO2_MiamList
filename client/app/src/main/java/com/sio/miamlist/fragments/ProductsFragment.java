@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.sio.miamlist.R;
 import com.sio.miamlist.activities.BaseActivity;
 import com.sio.miamlist.adapters.ProductsAdapter;
+import com.sio.miamlist.adapters.SubstringArrayAdapter;
 import com.sio.miamlist.services.ApiLinker;
 import com.sio.miamlist.services.SessionManager;
 import com.sio.miamlist.utils.OrderManager;
@@ -207,10 +208,10 @@ public class ProductsFragment extends Fragment {
         MaterialButton btnSave                 = view.findViewById(R.id.btnSaveProduct);
         MaterialButton btnCancel               = view.findViewById(R.id.btnCancelProduct);
 
-        ArrayAdapter<String> suggestionAdapter =
-                new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line);
+        ArrayAdapter<String> suggestionAdapter = new SubstringArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line);
         editLabel.setAdapter(suggestionAdapter);
         editLabel.setThreshold(1);
+
         editLabel.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
             @Override public void onTextChanged(CharSequence s, int st, int b, int c) {
@@ -457,18 +458,21 @@ public class ProductsFragment extends Fragment {
     private void fetchSuggestions(String query, ArrayAdapter<String> suggestionAdapter) {
         new Thread(() -> {
             try {
-                Response response = ApiLinker.getInstance()
-                        .getData("/api/products?label=" + query, token);
+                Response response = ApiLinker.getInstance().getData("/api/products?label=" + query, token);
+
                 if (response.isSuccessful()) {
                     JSONArray array = new JSONArray(response.body().string());
                     List<String> labels = new ArrayList<>();
+
                     for (int i = 0; i < array.length(); i++)
                         labels.add(array.getJSONObject(i).getString("label"));
 
                     requireActivity().runOnUiThread(() -> {
                         suggestionAdapter.clear();
                         suggestionAdapter.addAll(labels);
-                        if (!labels.isEmpty()) suggestionAdapter.notifyDataSetChanged();
+                        if (!labels.isEmpty()) {
+                            suggestionAdapter.notifyDataSetChanged();
+                        }
                     });
                 }
             } catch (Exception e) {
