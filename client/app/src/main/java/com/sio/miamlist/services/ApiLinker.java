@@ -12,7 +12,7 @@ import okhttp3.Response;
 
 public class ApiLinker {
 
-    private final String BASE_URL = "";
+    private final String BASE_URL = "http://10.0.2.2:3000";
     private final MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
     private static ApiLinker instance = null;
 

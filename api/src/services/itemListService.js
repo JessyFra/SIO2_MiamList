@@ -34,7 +34,8 @@ exports.createByShoppingListId = async (data, user_p) => {
             throw error;
         }
 
-        const itemList = await ItemList.findOne({
+        // FIX: was "const itemList" – impossible de réassigner une constante
+        let itemList = await ItemList.findOne({
             where: {
                 productId: data.productId,
                 shoppingId: parseInt(data.shoppingListId),

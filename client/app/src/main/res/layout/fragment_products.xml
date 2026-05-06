@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F7F4F1">
 
-    <!-- ══ AppBar — même style que activity_shopping_lists ══ -->
+    <!-- ══ AppBar ══ -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,6 @@
             android:paddingTop="20dp"
             android:paddingBottom="20dp">
 
-            <!-- Sous-titre "MIAMLIST" -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,7 +33,6 @@
                 android:textAllCaps="true"
                 android:layout_marginBottom="4dp" />
 
-            <!-- Titre + badge -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -64,12 +62,9 @@
                     android:textColor="#CE7E4D"
                     android:background="@drawable/bg_icon_pill"
                     android:text="0" />
-
             </LinearLayout>
-
         </LinearLayout>
 
-        <!-- Séparateur -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -85,7 +80,7 @@
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:paddingTop="16dp"
-        android:paddingBottom="96dp"
+        android:paddingBottom="112dp"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
@@ -104,49 +99,53 @@
             android:layout_height="wrap_content"
             android:text="—"
             android:textSize="32sp"
-            android:textColor="#CE7E4D"
-            android:fontFamily="sans-serif-thin"
-            android:layout_marginBottom="16dp" />
+            android:textColor="#CCCCCC"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Aucun produit pour l'instant"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:fontFamily="sans-serif-light"
-            android:textColor="#1A1A1A"
-            android:letterSpacing="0.02" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Appuyez sur + pour ajouter votre premier produit"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif-light"
-            android:textColor="#AAAAAA"
-            android:gravity="center"
-            android:layout_marginTop="8dp"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp" />
-
+            android:textColor="#AAAAAA" />
     </LinearLayout>
 
-    <!-- ══ FAB ══ -->
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fabAddProduct"
+    <!-- ══ FABs groupés en bas à droite ══ -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="24dp"
-        android:text="Ajouter"
-        android:textColor="#FFFFFF"
-        android:fontFamily="sans-serif-light"
-        android:textAllCaps="false"
-        android:letterSpacing="0.04"
-        app:icon="@android:drawable/ic_input_add"
-        app:iconTint="#FFFFFF"
-        app:backgroundTint="@color/accent"
-        app:elevation="6dp"
-        app:cornerRadius="16dp" />
+        android:orientation="vertical"
+        android:gravity="end"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="48dp">
+
+        <!-- FAB secondaire : ajouter depuis une recette -->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabAddFromRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginBottom="10dp"
+            android:text="Depuis une recette"
+            app:icon="@android:drawable/ic_menu_agenda"
+            app:backgroundTint="#F5E6D8"
+            android:textColor="#CE7E4D"
+            app:iconTint="#CE7E4D"
+            app:pressedTranslationZ="2dp" />
+
+        <!-- FAB principal : ajouter un produit -->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabAddProduct"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Ajouter un produit"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#CE7E4D"
+            app:icon="@android:drawable/ic_input_add"
+            app:iconTint="#FFFFFF"
+            app:pressedTranslationZ="2dp" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
