@@ -17,8 +17,9 @@
         android:gravity="center_vertical"
         android:minHeight="76dp">
 
-        <!-- Bande gauche terracotta avec icône -->
+        <!-- Bande gauche terracotta = poignée de glissement -->
         <FrameLayout
+            android:id="@+id/dragHandle"
             android:layout_width="56dp"
             android:layout_height="match_parent"
             android:background="#F5E6D8"

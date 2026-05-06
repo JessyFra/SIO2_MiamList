@@ -2,8 +2,10 @@ package com.sio.miamlist.adapters;
 
 import android.graphics.Paint;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.google.android.material.checkbox.MaterialCheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sio.miamlist.R;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
@@ -21,6 +24,10 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         void onEdit(ProductItem item);
         void onDelete(ProductItem item);
         void onCheckedChanged(ProductItem item, boolean checked);
+    }
+
+    public interface DragListener {
+        void startDrag(ViewHolder holder);
     }
 
     public static class ProductItem {
@@ -44,10 +51,20 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     private final List<ProductItem>       items;
     private final OnProductActionListener listener;
+    private DragListener                  dragListener;
 
     public ProductsAdapter(List<ProductItem> items, OnProductActionListener listener) {
         this.items    = items;
         this.listener = listener;
+    }
+
+    public void setDragListener(DragListener dl) {
+        this.dragListener = dl;
+    }
+
+    public void onItemMoved(int from, int to) {
+        Collections.swap(items, from, to);
+        notifyItemMoved(from, to);
     }
 
     @NonNull
@@ -62,14 +79,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ProductItem item = items.get(position);
 
-        // Texte
         holder.tvLabel.setText(item.label);
         bindQtyUnit(holder, item);
-
-        // Style barré si coché
         applyCheckedStyle(holder, item.checked);
 
-        // Checkbox — éviter le listener parasite au rebind
+        // Checkbox
         holder.cbProduct.setOnCheckedChangeListener(null);
         holder.cbProduct.setChecked(item.checked);
         holder.cbProduct.setOnCheckedChangeListener((btn, isChecked) -> {
@@ -80,6 +94,16 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
         holder.btnEdit.setOnClickListener(v -> listener.onEdit(item));
         holder.btnDelete.setOnClickListener(v -> listener.onDelete(item));
+
+        // Bande orange gauche = poignée de glissement
+        if (dragListener != null && holder.dragHandle != null) {
+            holder.dragHandle.setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    dragListener.startDrag(holder);
+                }
+                return false;
+            });
+        }
     }
 
     @Override
@@ -87,7 +111,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     private void bindQtyUnit(ViewHolder holder, ProductItem item) {
         if (item.quantity > 0) {
-            String qty = item.quantity == (int) item.quantity
+            String qty  = item.quantity == (int) item.quantity
                     ? String.valueOf((int) item.quantity)
                     : String.valueOf(item.quantity);
             String text = (item.unit != null && !item.unit.isEmpty())
@@ -113,10 +137,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         MaterialCheckBox cbProduct;
-        TextView    tvLabel;
-        TextView    tvQtyUnit;
-        ImageButton btnEdit;
-        ImageButton btnDelete;
+        TextView         tvLabel;
+        TextView         tvQtyUnit;
+        ImageButton      btnEdit;
+        ImageButton      btnDelete;
+        View             dragHandle;
 
         ViewHolder(View v) {
             super(v);
@@ -125,6 +150,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             tvQtyUnit  = v.findViewById(R.id.tvProductQtyUnit);
             btnEdit    = v.findViewById(R.id.btnEditProduct);
             btnDelete  = v.findViewById(R.id.btnDeleteProduct);
+            dragHandle = v.findViewById(R.id.dragHandle);
         }
     }
 }

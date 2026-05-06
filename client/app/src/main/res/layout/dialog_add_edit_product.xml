@@ -81,6 +81,7 @@
             style="@style/Widget.MiamList.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/on_surface"
             android:hint="Nom du produit">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -89,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:padding="12dp"
+                android:textColor="@color/on_surface"
                 android:dropDownSelector="@color/accent_light"
                 android:popupBackground="@color/background" />
         </com.google.android.material.textfield.TextInputLayout>

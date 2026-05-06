@@ -151,7 +151,6 @@ router.patch("/item-lists/:id", authMiddleware, itemListController.patch);
  *             required:
  *               - quantity
  *               - checked
- *               - productId
  *             properties:
  *               quantity:
  *                 type: number
@@ -162,21 +161,86 @@ router.patch("/item-lists/:id", authMiddleware, itemListController.patch);
  *               productId:
  *                 type: integer
  *                 example: 1
+ *               recipeId:
+ *                 type: integer
+ *                 example: 1
  *     responses:
  *       200:
- *         description: Quantité du produit modifié de la liste de course avec succès
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ItemListMinimal'
+ *          description: Quantité du produit modifié de la liste de course avec succès
+ *          content:
+ *            application/json:
+ *              schema:
+ *                oneOf:
+ *                  - type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        recipeProduct:
+ *                          $ref: '#/components/schemas/ItemListMinimal'
+ *                        code:
+ *                          type: integer
+ *                  - $ref: '#/components/schemas/ItemListMinimal'
+ *              examples:
+ *                formatTableau:
+ *                  summary: Retourne une liste d'objets avec wrapper
+ *                  value:
+ *                    - recipeProduct:
+ *                        id: 1
+ *                        quantity: 1.5
+ *                        checked: false
+ *                        createdAt: 1970-01-01T00:00:00.000Z
+ *                        updatedAt: 1970-01-01T00:00:00.000Z
+ *                        productId: 1
+ *                        shoppingId: 1
+ *                      code: 200
+ *                formatObjetSimple:
+ *                  summary: Retourne uniquement l'objet ItemListMinimal
+ *                  value:
+ *                    id: 1
+ *                    quantity: 1.5
+ *                    checked: false
+ *                    createdAt: 1970-01-01T00:00:00.000Z
+ *                    updatedAt: 1970-01-01T00:00:00.000Z
+ *                    productId: 1
+ *                    shoppingId: 1
  *       201:
  *         description: Liste de produit de la liste de course créée avec succès
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/ItemListMinimal'
+ *               oneOf:
+ *                 - type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       recipeProduct:
+ *                         $ref: '#/components/schemas/ItemListMinimal'
+ *                       code:
+ *                         type: integer
+ *                 - $ref: '#/components/schemas/ItemListMinimal'
+ *             examples:
+ *               formatTableau:
+ *                 summary: Retourne une liste d'objets avec wrapper
+ *                 value:
+ *                   - recipeProduct:
+ *                       id: 1
+ *                       quantity: 1.5
+ *                       checked: false
+ *                       createdAt: 1970-01-01T00:00:00.000Z
+ *                       updatedAt: 1970-01-01T00:00:00.000Z
+ *                       productId: 1
+ *                       shoppingId: 1
+ *                     code: 201
+ *               formatObjetSimple:
+ *                 summary: Retourne uniquement l'objet ItemListMinimal
+ *                 value:
+ *                   id: 1
+ *                   quantity: 1.5
+ *                   checked: false
+ *                   createdAt: 1970-01-01T00:00:00.000Z
+ *                   updatedAt: 1970-01-01T00:00:00.000Z
+ *                   productId: 1
+ *                   shoppingId: 1
  *       400:
  *         description: Mauvaise requête
  *         content:
@@ -190,7 +254,15 @@ router.patch("/item-lists/:id", authMiddleware, itemListController.patch);
  *               parametersRequiered:
  *                 summary: Manque de paramètre
  *                 value:
- *                   error: Parameters 'quantity', 'checked' and 'productId' are required
+ *                   error: Parameters 'quantity' and 'checked' are required
+ *               idParameterRequiered:
+ *                 summary: Manque un paramètre id
+ *                 value:
+ *                   error: "'productId' or 'recipeId' is required"
+ *               toMushIdParameters:
+ *                 summary: Les deux paramètres sont présents
+ *                 value:
+ *                   error: "'productId' and 'recipeId' cannot be present at the same time"
  *               quantityError:
  *                 summary: Ajoute une quantité nulle
  *                 value:
@@ -205,6 +277,15 @@ router.patch("/item-lists/:id", authMiddleware, itemListController.patch);
  *                 error:
  *                   type: string
  *                   example: An user can only add an item in his own shopping list
+ *             examples:
+ *               shoppingListError:
+ *                 summary: Ajout d'un élément à une liste de course n'appartenant pas à l'Utilisateur
+ *                 value:
+ *                   error: An user can only add an item in his own shopping list
+ *               recipeError:
+ *                 summary: Ajout d'une recette n'appartenant pas à l'Utilisateur
+ *                 value:
+ *                   error: An user can only add his own recipe in a shopping list
  *       404:
  *         description: Non trouvé
  *         content:

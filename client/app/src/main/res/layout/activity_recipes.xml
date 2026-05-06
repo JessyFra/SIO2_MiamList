@@ -18,29 +18,47 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingStart="24dp"
-            android:paddingEnd="24dp"
+            android:paddingEnd="16dp"
             android:paddingTop="20dp"
             android:paddingBottom="20dp">
 
-            <!-- Sous-titre discret -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
-                android:textColor="#CE7E4D"
-                android:letterSpacing="0.18"
-                android:textAllCaps="true"
-                android:layout_marginBottom="4dp" />
-
-            <!-- Titre principal -->
+            <!-- Ligne 1 : label app + bouton logout -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/app_name"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="#CE7E4D"
+                    android:letterSpacing="0.18"
+                    android:textAllCaps="true" />
+
+                <!-- Bouton déconnexion -->
+                <ImageButton
+                    android:id="@+id/btnLogout"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@android:drawable/ic_lock_power_off"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Déconnexion"
+                    app:tint="#CE7E4D" />
+
+            </LinearLayout>
+
+            <!-- Ligne 2 : titres + badge -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="4dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -54,7 +72,6 @@
                     android:textColor="#1A1A1A"
                     android:textSize="28sp" />
 
-                <!-- Badge nombre de listes -->
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="0dp"
@@ -129,48 +146,29 @@
             android:layout_height="wrap_content"
             android:text="—"
             android:textSize="32sp"
-            android:textColor="#CE7E4D"
-            android:fontFamily="sans-serif-thin"
-            android:layout_marginBottom="16dp" />
+            android:textColor="#CCCCCC"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_list_yet"
-            android:textSize="16sp"
+            android:text="Aucune recette pour l'instant"
+            android:textSize="15sp"
             android:fontFamily="sans-serif-light"
-            android:textColor="#1A1A1A"
-            android:letterSpacing="0.02" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Appuyez sur le bouton + pour créer votre première liste"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif-light"
-            android:textColor="#AAAAAA"
-            android:gravity="center"
-            android:layout_marginTop="8dp"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp" />
+            android:textColor="#AAAAAA" />
     </LinearLayout>
 
-    <!-- ══ FAB élégant ══ -->
+    <!-- ══ FAB ══ -->
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabAddList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
-        android:text="@string/new_recipe"
-        android:textColor="#FFFFFF"
-        android:fontFamily="sans-serif-light"
-        android:textAllCaps="false"
-        android:letterSpacing="0.04"
+        android:text="Nouvelle recette"
         app:icon="@android:drawable/ic_input_add"
-        app:iconTint="#FFFFFF"
-        app:backgroundTint="@color/accent"
-        app:elevation="6dp"
-        app:cornerRadius="16dp" />
+        app:backgroundTint="#CE7E4D"
+        android:textColor="#FFFFFF"
+        app:iconTint="#FFFFFF" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,7 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,7 @@ import com.sio.miamlist.R;
 import com.sio.miamlist.adapters.ShoppingListsAdapter;
 import com.sio.miamlist.services.ApiLinker;
 import com.sio.miamlist.services.SessionManager;
+import com.sio.miamlist.utils.OrderManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,7 +29,7 @@ import java.util.List;
 
 import okhttp3.Response;
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeActivity extends BaseActivity {
 
     private ShoppingListsAdapter adapter;
     private final List<ShoppingListsAdapter.ListItem> listsItem = new ArrayList<>();
@@ -45,8 +47,12 @@ public class RecipeActivity extends AppCompatActivity {
         tvListCount = findViewById(R.id.tvListCount);
         layoutEmpty = findViewById(R.id.layoutEmpty);
 
+        // Bouton déconnexion
+        findViewById(R.id.btnLogout).setOnClickListener(v -> logout());
+
         RecyclerView recycler = findViewById(R.id.recyclerRecipes);
         recycler.setLayoutManager(new LinearLayoutManager(this));
+
         adapter = new ShoppingListsAdapter(listsItem, new ShoppingListsAdapter.OnListActionListener() {
             @Override
             public void onListClick(int id, String name) {
@@ -58,148 +64,150 @@ public class RecipeActivity extends AppCompatActivity {
 
             @Override
             public void onListDelete(int id, String name) {
-                showDeleteConfirmDialog(id, name);
+                deleteRecipe(id);
             }
         });
+
+        // Drag & drop
+        ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView rv,
+                                  @NonNull RecyclerView.ViewHolder from,
+                                  @NonNull RecyclerView.ViewHolder to) {
+                adapter.onItemMoved(from.getAdapterPosition(), to.getAdapterPosition());
+                // Sauvegarde de l'ordre après chaque déplacement
+                List<Integer> ids = new ArrayList<>();
+                for (ShoppingListsAdapter.ListItem item : listsItem) ids.add(item.id);
+                OrderManager.saveOrder(getApplicationContext(), OrderManager.KEY_RECIPES, ids);
+                return true;
+            }
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder vh, int dir) {}
+            @Override
+            public boolean isLongPressDragEnabled() { return false; }
+        };
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recycler);
+        adapter.setDragListener(touchHelper::startDrag);
+
         recycler.setAdapter(adapter);
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fabAddList);
-        fab.setOnClickListener(v -> showCreateListDialog());
+        fab.setOnClickListener(v -> showCreateRecipeDialog());
 
-        loadLists();
+        loadRecipes();
     }
 
-    private void showDeleteConfirmDialog(int id, String name) {
-        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.Theme_MiamList_BottomSheet);
-        View view = getLayoutInflater().inflate(R.layout.dialog_delete_confirm, findViewById(android.R.id.content), false);
-        dialog.setContentView(view);
-
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
-
-        TextView tvMessage       = view.findViewById(R.id.tvDeleteMessage);
-        MaterialButton btnCancel = view.findViewById(R.id.btnCancelDelete);
-        MaterialButton btnDelete = view.findViewById(R.id.btnConfirmDelete);
-
-        tvMessage.setText("Voulez-vous vraiment supprimer la liste \"" + name + "\" ?");
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-        btnDelete.setOnClickListener(v -> {
-            deleteList(id);
-            dialog.dismiss();
-        });
-
-        dialog.show();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadRecipes();
     }
 
-    private void loadLists() {
+    private void loadRecipes() {
         new Thread(() -> {
             try {
                 Response response = ApiLinker.getInstance().getData("/api/recipes", token);
+                int code = response.code();
                 String body = response.body().string();
+
                 runOnUiThread(() -> {
+                    if (!checkAuth(code)) return;
                     try {
                         JSONArray array = new JSONArray(body);
                         int oldSize = listsItem.size();
                         listsItem.clear();
-
-                        if (oldSize > 0) {
-                            adapter.notifyItemRangeRemoved(0, oldSize);
-                        }
+                        if (oldSize > 0) adapter.notifyItemRangeRemoved(0, oldSize);
 
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject obj = array.getJSONObject(i);
                             listsItem.add(new ShoppingListsAdapter.ListItem(
                                     obj.getInt("id"),
-                                    obj.getString("name")
-                            ));
+                                    obj.getString("name")));
                         }
-
-                        if (!listsItem.isEmpty()) {
+                        // Restaurer l'ordre sauvegardé
+                        OrderManager.applyOrder(listsItem,
+                                OrderManager.getSavedOrder(getApplicationContext(), OrderManager.KEY_RECIPES),
+                                item -> item.id);
+                        if (!listsItem.isEmpty())
                             adapter.notifyItemRangeInserted(0, listsItem.size());
-                        }
 
                         updateEmptyState();
                     } catch (Exception e) {
-                        Log.e("SHOPPINGLIST", e.toString());
+                        Log.e("RECIPE", e.toString());
                     }
                 });
             } catch (Exception e) {
-                Log.e("SHOPPINGLIST", e.toString());
+                Log.e("RECIPE", e.toString());
             }
         }).start();
     }
 
     private void updateEmptyState() {
-        int count = listsItem.size();
-        tvListCount.setText(String.valueOf(count));
-        layoutEmpty.setVisibility(count == 0 ? View.VISIBLE : View.GONE);
+        tvListCount.setText(String.valueOf(listsItem.size()));
+        layoutEmpty.setVisibility(listsItem.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
-    private void showCreateListDialog() {
+    private void showCreateRecipeDialog() {
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.Theme_MiamList_BottomSheet);
-        View view = getLayoutInflater().inflate(R.layout.dialog_create_list, findViewById(android.R.id.content), false);
+        View view = getLayoutInflater().inflate(R.layout.dialog_create_recipe,
+                findViewById(android.R.id.content), false);
         dialog.setContentView(view);
-
-        if (dialog.getWindow() != null) {
+        if (dialog.getWindow() != null)
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
 
-        TextInputEditText editName = view.findViewById(R.id.editListName);
-        MaterialButton btnCreate  = view.findViewById(R.id.btnCreate);
-        MaterialButton btnCancel  = view.findViewById(R.id.btnCancel);
+        TextInputEditText editName        = view.findViewById(R.id.editRecipeName);
+        TextInputEditText editDescription = view.findViewById(R.id.editRecipeDescription);
+        MaterialButton    btnCreate       = view.findViewById(R.id.btnCreate);
+        MaterialButton    btnCancel       = view.findViewById(R.id.btnCancel);
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
-
         btnCreate.setOnClickListener(v -> {
             String name = editName.getText() != null
                     ? editName.getText().toString().trim() : "";
             if (!name.isEmpty()) {
-                createList(name);
+                String desc = editDescription.getText() != null
+                        ? editDescription.getText().toString().trim() : "";
+                createRecipe(name, desc);
                 dialog.dismiss();
             } else {
                 editName.setError("Veuillez saisir un nom");
             }
         });
 
-        editName.setOnEditorActionListener((tv, actionId, event) -> {
-            btnCreate.performClick();
-            return true;
-        });
-
         dialog.show();
     }
 
-    private void createList(String name) {
+    private void createRecipe(String name, String description) {
         new Thread(() -> {
             try {
                 JSONObject body = new JSONObject();
                 body.put("name", name);
-                Response response = ApiLinker.getInstance().postData("/api/recipes", body, token);
-                if (response.isSuccessful()) loadLists();
+                if (!description.isEmpty()) body.put("description", description);
+                Response response = ApiLinker.getInstance().postData("/api/recipes/", body, token);
+                if (!checkAuth(response.code())) return;
+                if (response.isSuccessful()) loadRecipes();
             } catch (Exception e) {
-                Log.e("SHOPPINGLIST", e.toString());
+                Log.e("RECIPE", e.toString());
             }
         }).start();
     }
 
-    private void deleteList(int id) {
+    private void deleteRecipe(int id) {
         new Thread(() -> {
             try {
                 Response response = ApiLinker.getInstance().deleteData("/api/recipes/" + id, token);
-
-                if (response.isSuccessful()) {
-                    loadLists();
-                }
+                if (!checkAuth(response.code())) return;
+                if (response.isSuccessful()) loadRecipes();
             } catch (Exception e) {
-                Log.e("SHOPPINGLIST", e.toString());
+                Log.e("RECIPE", e.toString());
             }
         }).start();
     }
 
     public void loadShoppingList(View view) {
-        Intent intent = new Intent(RecipeActivity.this, ShoppingListsActivity.class);
-        startActivity(intent);
+        finish();
         overridePendingTransition(0, 0);
     }
 }

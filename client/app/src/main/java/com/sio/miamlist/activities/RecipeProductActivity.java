@@ -2,12 +2,10 @@ package com.sio.miamlist.activities;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.sio.miamlist.R;
 import com.sio.miamlist.fragments.RecipeProductsFragment;
 
-public class RecipeProductActivity extends AppCompatActivity {
+public class RecipeProductActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +25,6 @@ public class RecipeProductActivity extends AppCompatActivity {
         }
     }
 
-    // Permet au Fragment d'appeler onBackPressed()
     @Override
     public void onBackPressed() {
         super.onBackPressed();

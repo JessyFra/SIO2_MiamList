@@ -58,15 +58,14 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject json = new JSONObject(responseBody);
                         if (response.isSuccessful()) {
                             String token = json.getString("access_token");
-
-                            // Sauvegarde du token
                             SessionManager.saveToken(token, this);
-
-                            // Navigation vers les listes
                             startActivity(new Intent(this, ShoppingListsActivity.class));
                             finish();
                         } else {
-                            showError(json.optString("message", "Erreur de connexion"));
+                            // FIX: l'API renvoie "error", pas "message"
+                            String msg = json.optString("error",
+                                         json.optString("message", "Erreur de connexion"));
+                            showError(msg);
                         }
                     } catch (Exception e) {
                         showError("Erreur inattendue");

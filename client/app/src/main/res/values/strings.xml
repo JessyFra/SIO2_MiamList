@@ -12,9 +12,12 @@
     <string name="my_lists">Listes</string>
     <string name="my_recipes">Recettes</string>
     <string name="give_your_list_a_name">Donnez un nom à votre liste</string>
+    <string name="give_your_recipe_a_name">Donnez un nom et une description à votre recette</string>
     <string name="example_shopping">Exemple: Repas crêpes</string>
+    <string name="example_description_recipe">Exemple: La superbe recette de grand-mère</string>
     <string name="cancel">Annuler</string>
     <string name="create_the_list">Créer la liste</string>
+    <string name="create_the_recipe">Créer la recette</string>
     <string name="delete">Supprimer</string>
     <string name="press_to_open">Appuyez pour ouvrir</string>
 </resources>

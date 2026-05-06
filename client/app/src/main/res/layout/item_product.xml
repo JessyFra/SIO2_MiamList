@@ -17,12 +17,28 @@
         android:gravity="center_vertical"
         android:minHeight="72dp">
 
-        <!-- Checkbox à gauche -->
+        <!-- Bande gauche terracotta = poignée de glissement -->
+        <FrameLayout
+            android:id="@+id/dragHandle"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:background="#F5E6D8"
+            android:minHeight="72dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="☰"
+                android:textSize="14sp"
+                android:textColor="#CE7E4D" />
+        </FrameLayout>
+
+        <!-- Checkbox -->
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cbProduct"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_gravity="center_vertical"
             android:gravity="center"
             app:buttonTint="@color/checkbox_tint"
@@ -35,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingStart="12dp"
+            android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:paddingTop="16dp"
             android:paddingBottom="16dp">

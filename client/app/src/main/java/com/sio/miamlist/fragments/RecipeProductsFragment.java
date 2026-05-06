@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,9 +19,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.sio.miamlist.R;
+import com.sio.miamlist.activities.BaseActivity;
 import com.sio.miamlist.adapters.RecipeAdapter;
 import com.sio.miamlist.services.ApiLinker;
 import com.sio.miamlist.services.SessionManager;
+import com.sio.miamlist.utils.OrderManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,12 +62,10 @@ public class RecipeProductsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             listId   = getArguments().getInt(ARG_ID, 0);
             listName = getArguments().getString(ARG_NAME, "Recette");
         }
-
         token = SessionManager.getToken(getContext());
     }
 
@@ -93,12 +94,35 @@ public class RecipeProductsFragment extends Fragment {
             public void onEdit(RecipeAdapter.RecipeItem item) {
                 showAddEditDialog(item);
             }
-
             @Override
             public void onDelete(RecipeAdapter.RecipeItem item) {
                 showDeleteConfirmDialog(item);
             }
         });
+
+        // Drag & drop
+        ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView rv,
+                                  @NonNull RecyclerView.ViewHolder from,
+                                  @NonNull RecyclerView.ViewHolder to) {
+                adapter.onItemMoved(from.getAdapterPosition(), to.getAdapterPosition());
+                // Sauvegarde de l'ordre après chaque déplacement
+                List<Integer> ids = new ArrayList<>();
+                for (RecipeAdapter.RecipeItem item : items) ids.add(item.listItemId);
+                OrderManager.saveOrder(requireContext(), OrderManager.keyRecipeProducts(listId), ids);
+                return true;
+            }
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder vh, int dir) {}
+            @Override
+            public boolean isLongPressDragEnabled() { return false; }
+        };
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recycler);
+        adapter.setDragListener(touchHelper::startDrag);
+
         recycler.setAdapter(adapter);
 
         ExtendedFloatingActionButton fab = view.findViewById(R.id.fabAddProduct);
@@ -107,21 +131,23 @@ public class RecipeProductsFragment extends Fragment {
         loadProducts();
     }
 
+    // ─── Chargement ──────────────────────────────────────────────────────────
+
     private void loadProducts() {
         new Thread(() -> {
             try {
                 Response response = ApiLinker.getInstance()
                         .getData("/api/recipe/" + listId + "/recipe-products", token);
+                int code = response.code();
                 String body = response.body().string();
 
                 requireActivity().runOnUiThread(() -> {
+                    if (!checkAuth401(code)) return;
                     try {
                         JSONArray array = new JSONArray(body);
-
                         int oldSize = items.size();
                         items.clear();
-                        if (oldSize > 0)
-                            adapter.notifyItemRangeRemoved(0, oldSize);
+                        if (oldSize > 0) adapter.notifyItemRangeRemoved(0, oldSize);
 
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject obj     = array.getJSONObject(i);
@@ -134,82 +160,69 @@ public class RecipeProductsFragment extends Fragment {
                                     product.optString("unit", "")
                             ));
                         }
-
-                        if (!items.isEmpty())
-                            adapter.notifyItemRangeInserted(0, items.size());
-
+                        // Restaurer l'ordre sauvegardé
+                        OrderManager.applyOrder(items,
+                                OrderManager.getSavedOrder(requireContext(), OrderManager.keyRecipeProducts(listId)),
+                                item -> item.listItemId);
+                        if (!items.isEmpty()) adapter.notifyItemRangeInserted(0, items.size());
                         updateEmptyState();
-
                     } catch (Exception e) {
-                        Log.e(TAG, "Parsing : " + e.getMessage());
+                        Log.e(TAG, "Parsing: " + e.getMessage());
                     }
                 });
             } catch (Exception e) {
-                Log.e(TAG, "Réseau : " + e.getMessage());
+                Log.e(TAG, "Réseau: " + e.getMessage());
             }
         }).start();
     }
 
+    // ─── Dialogue ajout/édition ───────────────────────────────────────────────
+
     private void showAddEditDialog(@Nullable RecipeAdapter.RecipeItem editItem) {
-        BottomSheetDialog dialog = new BottomSheetDialog(requireContext(),
-                R.style.Theme_MiamList_BottomSheet);
+        BottomSheetDialog dialog = new BottomSheetDialog(requireContext(), R.style.Theme_MiamList_BottomSheet);
         View view = getLayoutInflater().inflate(R.layout.dialog_add_edit_product,
                 requireActivity().findViewById(android.R.id.content), false);
-
         dialog.setContentView(view);
-
         if (dialog.getWindow() != null)
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        TextView          tvTitle    = view.findViewById(R.id.tvDialogTitle);
-        TextInputEditText editLabel  = view.findViewById(R.id.editProductLabel);
-        TextInputEditText editQty    = view.findViewById(R.id.editProductQuantity);
-        TextInputEditText editUnit   = view.findViewById(R.id.editProductUnit);
-        MaterialButton    btnCancel  = view.findViewById(R.id.btnCancelProduct);
-        MaterialButton    btnSave    = view.findViewById(R.id.btnSaveProduct);
+        com.google.android.material.textfield.MaterialAutoCompleteTextView editLabel =
+                view.findViewById(R.id.editProductLabel);
+        TextInputEditText editQty   = view.findViewById(R.id.editProductQuantity);
+        TextInputEditText editUnit  = view.findViewById(R.id.editProductUnit);
+        MaterialButton btnSave      = view.findViewById(R.id.btnSaveProduct);
+        MaterialButton btnCancel    = view.findViewById(R.id.btnCancelProduct);
+
+        // La checkbox checked n'existe pas dans ce dialog — rien à masquer
 
         if (editItem != null) {
-            tvTitle.setText("Modifier le produit");
             editLabel.setText(editItem.label);
-
-            if (editItem.quantity > 0) {
-                editQty.setText(editItem.quantity == (int) editItem.quantity
-                        ? String.valueOf((int) editItem.quantity)
-                        : String.valueOf(editItem.quantity));
-            }
-            if (editItem.unit != null && !editItem.unit.isEmpty()) {
-                editUnit.setText(editItem.unit);
-            }
+            editQty.setText(editItem.quantity > 0
+                    ? (editItem.quantity == (int) editItem.quantity
+                       ? String.valueOf((int) editItem.quantity)
+                       : String.valueOf(editItem.quantity))
+                    : "");
+            editUnit.setText(editItem.unit);
         }
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
-
         btnSave.setOnClickListener(v -> {
-            String label = editLabel.getText() != null
-                    ? editLabel.getText().toString().trim() : "";
-            if (label.isEmpty()) {
-                editLabel.setError("Veuillez saisir un nom");
-                return;
-            }
+            String label   = editLabel.getText() != null ? editLabel.getText().toString().trim() : "";
+            String qtyStr  = editQty.getText()   != null ? editQty.getText().toString().trim()   : "";
+            String unitStr = editUnit.getText()  != null ? editUnit.getText().toString().trim()  : "";
 
-            String qtyStr  = editQty.getText()  != null ? editQty.getText().toString().trim()  : "";
-            String unitStr = editUnit.getText() != null ? editUnit.getText().toString().trim() : "";
-            float  qty     = qtyStr.isEmpty() ? 1f : Float.parseFloat(qtyStr);
+            if (label.isEmpty()) { editLabel.setError("Veuillez saisir un nom"); return; }
+            float qty = qtyStr.isEmpty() ? 1f : Float.parseFloat(qtyStr);
 
             if (editItem == null) {
                 createProduct(label, unitStr, qty);
             } else {
                 updateProduct(editItem, label, unitStr, qty);
             }
-
             dialog.dismiss();
         });
 
-        editUnit.setOnEditorActionListener((tv, a, e) -> {
-            btnSave.performClick();
-            return true;
-        });
-
+        editUnit.setOnEditorActionListener((tv, a, e) -> { btnSave.performClick(); return true; });
         dialog.show();
     }
 
@@ -220,13 +233,13 @@ public class RecipeProductsFragment extends Fragment {
                 body.put("label", label);
                 if (!unit.isEmpty()) body.put("unit", unit);
 
-                Response response = ApiLinker.getInstance().postData("/products", body, token);
+                // FIX: /products → /api/products
+                Response response = ApiLinker.getInstance().postData("/api/products", body, token);
+                if (!checkAuth401(response.code())) return;
 
                 if (response.isSuccessful()) {
-                    String    respBody    = response.body().string();
-                    JSONObject json       = new JSONObject(respBody);
+                    JSONObject json       = new JSONObject(response.body().string());
                     int        newProductId = json.getInt("id");
-
                     addProduct(newProductId, qty);
                 }
             } catch (Exception e) {
@@ -242,12 +255,13 @@ public class RecipeProductsFragment extends Fragment {
                 body.put("quantity", quantity);
                 body.put("productId", productId);
 
+                // FIX: /recipe/ → /api/recipe/
                 Response response = ApiLinker.getInstance()
-                        .postData("/recipe/" + listId + "/recipe-products", body, token);
+                        .postData("/api/recipe/" + listId + "/recipe-products", body, token);
+                if (!checkAuth401(response.code())) return;
 
                 if (response.isSuccessful())
                     requireActivity().runOnUiThread(this::loadProducts);
-
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
@@ -257,46 +271,40 @@ public class RecipeProductsFragment extends Fragment {
     private void updateProduct(RecipeAdapter.RecipeItem item, String label, String unit, float quantity) {
         new Thread(() -> {
             try {
-                JSONObject body = new JSONObject();
-                body.put("label", label);
-                body.put("unit", unit);
+                // Mise à jour du produit (label + unit)
+                JSONObject bodyProduct = new JSONObject();
+                bodyProduct.put("label", label);
+                bodyProduct.put("unit", unit);
+                Response r1 = ApiLinker.getInstance()
+                        .putData("/api/products/" + item.productId, bodyProduct, token);
+                if (!checkAuth401(r1.code())) return;
 
-                ApiLinker.getInstance().putData("/api/products/" + item.productId, body, token);
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
-        }).start();
+                // FIX: mise à jour de la quantité dans RecipeProduct (manquait)
+                JSONObject bodyQty = new JSONObject();
+                bodyQty.put("quantity", quantity);
+                Response r2 = ApiLinker.getInstance()
+                        .patchData("/api/recipe-products/" + item.listItemId, bodyQty, token);
+                if (!checkAuth401(r2.code())) return;
 
-        new Thread(() -> {
-            try {
-                JSONObject body = new JSONObject();
-                body.put("quantity", quantity);
-
-                Response response = ApiLinker.getInstance()
-                        .patchData("/api/recipe-products/" + item.listItemId, body, token);
-
-                if (response.isSuccessful())
-                    requireActivity().runOnUiThread(this::loadProducts);
-
+                requireActivity().runOnUiThread(this::loadProducts);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
         }).start();
     }
 
+    // ─── Suppression ─────────────────────────────────────────────────────────
+
     private void showDeleteConfirmDialog(RecipeAdapter.RecipeItem item) {
-        BottomSheetDialog dialog = new BottomSheetDialog(requireContext(),
-                R.style.Theme_MiamList_BottomSheet);
+        BottomSheetDialog dialog = new BottomSheetDialog(requireContext(), R.style.Theme_MiamList_BottomSheet);
         View view = getLayoutInflater().inflate(R.layout.dialog_delete_confirm,
                 requireActivity().findViewById(android.R.id.content), false);
         dialog.setContentView(view);
-
         if (dialog.getWindow() != null)
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         ((TextView) view.findViewById(R.id.tvDeleteMessage))
                 .setText("Supprimer \"" + item.label + "\" ?");
-
         view.findViewById(R.id.btnCancelDelete).setOnClickListener(v -> dialog.dismiss());
         view.findViewById(R.id.btnConfirmDelete).setOnClickListener(v -> {
             deleteProduct(item);
@@ -310,6 +318,7 @@ public class RecipeProductsFragment extends Fragment {
             try {
                 Response r = ApiLinker.getInstance()
                         .deleteData("/api/recipe-products/" + item.listItemId, token);
+                if (!checkAuth401(r.code())) return;
                 if (r.isSuccessful())
                     requireActivity().runOnUiThread(this::loadProducts);
             } catch (Exception e) {
@@ -318,8 +327,17 @@ public class RecipeProductsFragment extends Fragment {
         }).start();
     }
 
+    // ─── Utilitaires ─────────────────────────────────────────────────────────
+
     private void updateEmptyState() {
         tvProductCount.setText(String.valueOf(items.size()));
         layoutEmpty.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    private boolean checkAuth401(int code) {
+        if (getActivity() instanceof BaseActivity) {
+            return ((BaseActivity) getActivity()).checkAuth(code);
+        }
+        return true;
     }
 }

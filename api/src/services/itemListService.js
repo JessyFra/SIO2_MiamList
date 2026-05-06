@@ -1,21 +1,19 @@
-const { Product, User, ShoppingList, ItemList } = require("../models");
+const {
+    Product,
+    User,
+    ShoppingList,
+    ItemList,
+    Recipe,
+    RecipeProduct,
+} = require("../models");
 
 exports.createByShoppingListId = async (data, user_p) => {
     const user = await User.findByPk(user_p.id);
-
     const shoppingList = await ShoppingList.findByPk(data.shoppingListId);
 
     if (!shoppingList) {
         const error = new Error("Shopping list not found");
         error.code = "SHOPPING_LIST_NOT_FOUND";
-        throw error;
-    }
-
-    const product = await Product.findByPk(data.productId);
-
-    if (!product) {
-        const error = new Error("Product not found");
-        error.code = "PRODUCT_NOT_FOUND";
         throw error;
     }
 
@@ -27,25 +25,94 @@ exports.createByShoppingListId = async (data, user_p) => {
         throw error;
     }
 
-    const itemList = await ItemList.findOne({
-        where: {
-            productId: data.productId,
-            shoppingId: parseInt(data.shoppingListId),
-        },
-    });
-    if (itemList) {
-        await itemList.update({
-            quantity: itemList.quantity + (data.quantity ?? 1),
+    if (data.productId !== undefined) {
+        const product = await Product.findByPk(data.productId);
+
+        if (!product) {
+            const error = new Error("Product not found");
+            error.code = "PRODUCT_NOT_FOUND";
+            throw error;
+        }
+
+        // FIX: was "const itemList" – impossible de réassigner une constante
+        let itemList = await ItemList.findOne({
+            where: {
+                productId: data.productId,
+                shoppingId: parseInt(data.shoppingListId),
+            },
         });
-        return { data: itemList, code: 200 };
+        if (itemList) {
+            await itemList.update({
+                quantity: itemList.quantity + (data.quantity ?? 1),
+            });
+            return { data: itemList, code: 200 };
+        }
+        itemList = await ItemList.create({
+            quantity: data.quantity ?? 1,
+            checked: data.checked ?? false,
+            shoppingId: parseInt(data.shoppingListId),
+            productId: data.productId,
+        });
+        return { data: itemList, code: 201 };
+    } else {
+        const recipe = await Recipe.findByPk(data.recipeId);
+
+        if (!recipe) {
+            const error = new Error("Recipe not found");
+            error.code = "RECIPE_NOT_FOUND";
+            throw error;
+        }
+
+        if (recipe.userId !== user.id) {
+            const error = new Error(
+                "An user can only add his own recipe in a shopping list",
+            );
+            error.code = "FORBIDDEN";
+            throw error;
+        }
+
+        const recipeProducts = await RecipeProduct.findAll({
+            where: {
+                recipeId: data.recipeId,
+            },
+            include: [
+                {
+                    model: Product,
+                    as: "product",
+                },
+            ],
+            attributes: { exclude: ["productId"] },
+        });
+        let itemList;
+        let retourned = [];
+        let creation = false;
+        for (const recipeProduct of recipeProducts) {
+            itemList = await ItemList.findOne({
+                where: {
+                    productId: recipeProduct.product.id,
+                    shoppingId: parseInt(data.shoppingListId),
+                },
+            });
+            if (itemList) {
+                await itemList.update({
+                    quantity: itemList.quantity + (recipeProduct.quantity ?? 1),
+                });
+                retourned.push({ itemList: itemList, code: 200 });
+            } else {
+                itemList = await ItemList.create({
+                    quantity: recipeProduct.quantity ?? 1,
+                    checked: data.checked ?? false,
+                    shoppingId: parseInt(data.shoppingListId),
+                    productId: recipeProduct.product.id,
+                });
+                if (!creation) {
+                    creation = true;
+                }
+                retourned.push({ itemList: itemList, code: 201 });
+            }
+        }
+        return { data: retourned, code: creation ? 201 : 200 };
     }
-    itemList = await ItemList.create({
-        quantity: data.quantity ?? 1,
-        checked: data.checked ?? false,
-        shoppingId: parseInt(data.shoppingListId),
-        productId: data.productId,
-    });
-    return { data: itemList, code: 201 };
 };
 
 exports.getAllByShoppingListId = async (id, user_p) => {
